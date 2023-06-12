@@ -15,7 +15,8 @@ runs:
           echo "Checking for buildrc-override... at $override_artifact"
           if [[ -f "$override_artifact" ]]; then
             echo "Override artifact found. Moving..."
-            mv "$override_artifact" temp
+            mkdir -p temp
+            mv "$override_artifact" ./temp/buildrc
           else
             echo "Override artifact not found. Downloading from ghcr..."
             ghcr_url="ghcr.io/nuggxyz/buildrc:${version}"
@@ -25,10 +26,10 @@ runs:
 
           # Step 2: Setup alias
           echo "Setting up alias..."
-          find ./temp -type f -executable -print0 | xargs -0 -I {} mv {} ./buildrc-main
-          echo 'alias buildrc=$GITHUB_WORKSPACE/buildrc-main' >> $GITHUB_ENV
           echo "loading .buildrc"
-          buildrc load .buildrc
+          echo "$GITHUB_WORKSPACE/temp" >> $GITHUB_PATH
+          chmod +x ./temp/buildrc
+          ./temp/buildrc load .buildrc
           echo "buildrc loaded ✅"
         env:
           version: abc
