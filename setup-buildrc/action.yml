@@ -3,16 +3,19 @@ description: "setup buildrc in your github action"
 runs:
     using: "composite"
     steps:
+      - name: artifact
+        id: artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: buildrc-override
       - name: script
         shell: bash
         run: |
           # Step 1: Check for buildrc-override
           echo "Checking for buildrc-override..."
-          override_artifact_url=$(gh run list --workflow='artifact-workflow.yml' | grep "buildrc-override" | awk '{print $8}')
-          if [[ ! -z "$override_artifact_url" ]]; then
-            echo "Override artifact found. Downloading..."
-            wget $override_artifact_url -O buildrc-override.zip
-            unzip buildrc-override.zip -d temp
+          if [[ ! -f "$override_artifact" ]]; then
+            echo "Override artifact found. Moving..."
+            mv "$override_artifact" temp
           else
             echo "Override artifact not found. Downloading from ghcr..."
             ghcr_url="ghcr.io/nuggxyz/buildrc:${version}"
@@ -29,3 +32,4 @@ runs:
           echo "buildrc loaded ✅"
         env:
           version: abc
+          override_artifact: ${{ steps.download.outputs.download-path }}
