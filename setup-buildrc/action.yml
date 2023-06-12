@@ -32,4 +32,4 @@ runs:
           echo "buildrc loaded ✅"
         env:
           version: abc
-          override_artifact: ${{ steps.artifact.outputs.download-path }}
+          override_artifact: ${{ steps.artifact.outputs.download-path }}/buildrc-override
