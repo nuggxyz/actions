@@ -28,5 +28,4 @@ runs:
           buildrc load .buildrc
           echo "buildrc loaded ✅"
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
           version: abc
