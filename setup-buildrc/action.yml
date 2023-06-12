@@ -1,0 +1,29 @@
+name: Setup buildrc
+description: "setup buildrc in your github action"
+runs:
+    using: "composite"
+    steps:
+      - name: script
+        shell: bash
+        run: |
+          # Step 1: Check for buildrc-override
+          echo "Checking for buildrc-override..."
+          override_artifact_url=$(gh run list --workflow='artifact-workflow.yml' | grep "buildrc-override" | awk '{print $8}')
+          if [[ ! -z "$override_artifact_url" ]]; then
+            echo "Override artifact found. Downloading..."
+            wget $override_artifact_url -O buildrc-override.zip
+            unzip buildrc-override.zip -d temp
+          else
+            echo "Override artifact not found. Downloading from ghcr..."
+            ghcr_url="ghcr.io/nuggxyz/buildrc:${version}"
+            docker pull $ghcr_url
+            docker save $ghcr_url | tar -xvC temp
+          fi
+
+          # Step 2: Setup alias
+          echo "Setting up alias..."
+          find ./temp -type f -executable -print0 | xargs -0 -I {} mv {} ./buildrc-main
+          echo 'alias buildrc=$GITHUB_WORKSPACE/buildrc-main' >> $GITHUB_ENV
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          version: abc
