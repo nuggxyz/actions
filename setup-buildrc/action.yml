@@ -12,8 +12,8 @@ runs:
         shell: bash
         run: |
           # Step 1: Check for buildrc-override
-          echo "Checking for buildrc-override..."
-          if [[ ! -f "$override_artifact" ]]; then
+          echo "Checking for buildrc-override... at $override_artifact"
+          if [[ -f "$override_artifact" ]]; then
             echo "Override artifact found. Moving..."
             mv "$override_artifact" temp
           else
@@ -32,4 +32,4 @@ runs:
           echo "buildrc loaded ✅"
         env:
           version: abc
-          override_artifact: ${{ steps.download.outputs.download-path }}
+          override_artifact: ${{ steps.artifact.outputs.download-path }}
