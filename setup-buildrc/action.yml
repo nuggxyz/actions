@@ -24,6 +24,9 @@ runs:
           echo "Setting up alias..."
           find ./temp -type f -executable -print0 | xargs -0 -I {} mv {} ./buildrc-main
           echo 'alias buildrc=$GITHUB_WORKSPACE/buildrc-main' >> $GITHUB_ENV
+          echo "loading .buildrc"
+          buildrc load .buildrc
+          echo "buildrc loaded ✅"
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           version: abc
