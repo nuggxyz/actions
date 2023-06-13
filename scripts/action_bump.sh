@@ -34,7 +34,7 @@ for formula in $formulas; do
 		sed -i "s/\(constant_version: \).*/\1${LATEST_RELEASE}/" "$file"
 		echo "Updated $formula to version ${LATEST_RELEASE}."
 		DID_UPDATE=1
-		SCRIPT_CHANGELOG="$SCRIPT_CHANGELOG  \n  \n- $formula: \`${version}\` -> \`${LATEST_RELEASE}\`"
+		# SCRIPT_CHANGELOG="$SCRIPT_CHANGELOG  \n  \n- $formula: \`${version}\` -> \`${LATEST_RELEASE}\`"
 	fi
 done
 
