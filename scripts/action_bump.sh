@@ -5,6 +5,8 @@ formulas=$(find . -name "./setup-*/action.yml")
 SCRIPT_CHANGELOG="## updated formulas"
 DID_UPDATE=0
 
+echo "Found formulas: $formulas"
+
 for formula in $formulas; do
 
 	file=./$formula
