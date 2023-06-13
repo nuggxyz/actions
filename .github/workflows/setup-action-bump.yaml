@@ -50,7 +50,7 @@
                                     },
                                 with:
                                     {
-                                        file_pattern: "setup-*/action.yml",
+                                        file_pattern: "setup-buildrc/action.yml",
                                         commit_message: "(setup-action-bump) ${{ env.TAG }}",
                                         commit_author: "github-actions <41898282+github-actions[bot]@users.noreply.github.com>",
                                     },

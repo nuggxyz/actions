@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 
-formulas=$(find . -name "./setup-*/action.yml")
+formulas=$(find . -path "./setup-*" -name "action.yml")
 
 SCRIPT_CHANGELOG="## updated formulas"
 DID_UPDATE=0
+
+echo "Found formulas: $formulas"
 
 for formula in $formulas; do
 
