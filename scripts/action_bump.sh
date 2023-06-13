@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-formulas=$(find . -name "./setup-*/action.yml")
+formulas=$(find . -name "setup-*/action.yml")
 
 SCRIPT_CHANGELOG="## updated formulas"
 DID_UPDATE=0
