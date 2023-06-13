@@ -18,10 +18,11 @@ runs:
             mkdir -p temp
             mv "$override_artifact" ./temp/buildrc
           else
-            echo "Override artifact not found. Downloading from ghcr..."
-            ghcr_url="ghcr.io/nuggxyz/buildrc:${version}"
-            docker pull $ghcr_url
-            docker save $ghcr_url | tar -xvC temp
+            echo "Override artifact not found. Downloading from GitHub releases..."
+            # The name of the release file will be 'os-arch.tar.gz'
+            os_arch_pattern="${RUNNER_OS,,}-$RUNNER_ARCH.tar.gz"
+            gh release download --pattern "$os_arch_pattern" --repo nuggxyz/buildrc --dir ./temp/
+            tar -xzf "./temp/$os_arch_pattern" -C ./temp/
           fi
 
           # Step 2: Setup alias
@@ -32,5 +33,5 @@ runs:
           ./temp/buildrc load .buildrc
           echo "buildrc loaded ✅"
         env:
-          version: abc
+          version: v0.1.2
           override_artifact: ${{ steps.artifact.outputs.download-path }}/linux-amd64
