@@ -21,9 +21,6 @@ for formula in $formulas; do
 	# Get the latest release from GitHub API for the tftab repo
 	LATEST_RELEASE=$(curl --silent "https://api.github.com/repos/nuggxyz/$formula/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
 
-	# replace v with nothing
-	LATEST_RELEASE=${LATEST_RELEASE//v/}
-
 	version=$(grep -oE "version \".*\"" "$file" | cut -d\" -f2)
 
 	# Check if the version is already the latest
