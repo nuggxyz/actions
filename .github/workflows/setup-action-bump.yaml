@@ -1,5 +1,5 @@
 {
-    name: formula-bump,
+    name: setup-action-bump,
     on:
         {
             schedule: [{ cron: "0 0 * * *" }],
@@ -50,8 +50,8 @@
                                     },
                                 with:
                                     {
-                                        file_pattern: "Formula/*.rb",
-                                        commit_message: "(formula-bump) ${{ env.TAG }}",
+                                        file_pattern: "setup-*/action.yml",
+                                        commit_message: "(setup-action-bump) ${{ env.TAG }}",
                                         commit_author: "github-actions <41898282+github-actions[bot]@users.noreply.github.com>",
                                     },
                             },
