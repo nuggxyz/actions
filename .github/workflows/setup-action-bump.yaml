@@ -1,0 +1,79 @@
+{
+    name: formula-bump,
+    on:
+        {
+            schedule: [{ cron: "0 0 * * *" }],
+            workflow_dispatch: {},
+            push: { branches: [main] },
+        },
+    permissions: { contents: write, packages: write },
+    env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}", BUILDRC: .buildrc },
+    jobs:
+        {
+            main:
+                {
+                    runs-on: ubuntu-latest,
+                    steps:
+                        [
+                            {
+                                name: Check out code,
+                                uses: actions/checkout@v3,
+                                with: { clean: true, fetch-depth: 0 },
+                            },
+                            {
+                                name: Update formula,
+                                id: script,
+                                run: "${{ github.workspace }}/scripts/action_bump.sh",
+                            },
+
+                            {
+                                name: Bump version and push tag,
+                                id: tag_version,
+                                if: "${{ steps.script.outputs.DID_UPDATE == '1' || github.event_name == 'push' }}",
+                                uses: anothrNick/github-tag-action@1,
+                                env:
+                                    {
+                                        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}",
+                                        WITH_V: false,
+                                        DEFAULT_BUMP: patch,
+                                        DRY_RUN: true,
+                                    },
+                            },
+                            {
+                                name: commit,
+                                id: commit,
+                                if: "${{ steps.script.outputs.DID_UPDATE == '1' }}",
+                                uses: stefanzweifel/git-auto-commit-action@v4,
+                                env:
+                                    {
+                                        TAG: "${{ steps.tag_version.outputs.new_tag }}",
+                                    },
+                                with:
+                                    {
+                                        file_pattern: "Formula/*.rb",
+                                        commit_message: "(formula-bump) ${{ env.TAG }}",
+                                        commit_author: "github-actions <41898282+github-actions[bot]@users.noreply.github.com>",
+                                    },
+                            },
+                            {
+                                name: Create GitHub Release,
+                                uses: ncipollo/release-action@v1,
+                                if: "${{ steps.script.outputs.DID_UPDATE == '1' || github.event_name == 'push' }}",
+                                env:
+                                    {
+                                        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}",
+                                        TAG: "${{ steps.tag_version.outputs.new_tag }}",
+                                    },
+                                with:
+                                    {
+                                        tag: "${{ env.TAG }}",
+                                        name: "${{ env.TAG }}",
+                                        body: "Auto-generated release for ${{ env.TAG }}\n\n${{ steps.script.outputs.SCRIPT_CHANGELOG }}",
+                                        draft: false,
+                                        prerelease: false,
+                                    },
+                            },
+                        ],
+                },
+        },
+}
