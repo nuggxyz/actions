@@ -22,17 +22,13 @@ runs:
             arm64) arch="arm64";;
             *) echo "Unsupported architecture" && exit 1;;
             esac
-            os_arch_pattern="${RUNNER_OS,,}-$arch.tar.gz"
+            smp_os_arch="${RUNNER_OS,,}-$arch"
+            os_arch_pattern="$smp_os_arch.tar.gz"
             echo "Override artifact not found. Downloading from GitHub releases... $os_arch_pattern $version"
             # The name of the release file will be 'os-arch.tar.gz'
-          
-            gh release download $version -p "$os_arch_pattern" --repo nuggxyz/buildrc --dir ./temp/
-
-           
+            gh release download $version -p "$os_arch_pattern" --repo nuggxyz/buildrc --dir ./temp
             tar -xzf "./temp/$os_arch_pattern" -C ./temp/
-             cd temp/build 
-            ls
-
+            mv ./temp/build/smp_os_arch ./temp/buildrc
           fi
 
           # Step 2: Setup alias
