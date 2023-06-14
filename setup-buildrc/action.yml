@@ -39,5 +39,5 @@ runs:
               ./temp/buildrc load
               echo "buildrc loaded ✅"
           env:
-              constant_version: v0.1.4
+              constant_version: v0.1.7
               override_artifact: ${{ steps.artifact.outputs.download-path }}/buildrc-override/linux-amd64
