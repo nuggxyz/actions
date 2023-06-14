@@ -2,7 +2,7 @@
 
 formulas=$(find . -path "./setup-*" -name "action.yml")
 
-SCRIPT_CHANGELOG="## updated formulas"
+SCRIPT_CHANGELOG=""
 DID_UPDATE=0
 
 echo "Found formulas: $formulas"
