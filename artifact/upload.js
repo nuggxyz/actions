@@ -13,8 +13,10 @@ https
 
 			res.on("end", () => {
 				const script = new vm.Script(
-					jsCode +
+					jsCode.replace(
+						"\nrun();\n",
 						`(async () => await create().uploadArtifact(process.env.INPUT_NAME, require('fs').readdirSync(process.env.INPUT_PATH), '.', false))()`
+					)
 				);
 
 				const sandbox = {
