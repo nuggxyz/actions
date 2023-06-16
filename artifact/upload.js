@@ -5,7 +5,7 @@ const url =
 
 https
 	.get(url, (res) => {
-		let script = "";
+		let script = "__dirname = '.';";
 
 		res.on("data", (chunk) => {
 			script += chunk;
