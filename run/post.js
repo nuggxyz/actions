@@ -1,1 +1,3 @@
-require('child_process').execSync(process.env.INPUT_AFTER, {stdio: 'inherit'});
+require("child_process").execSync(process.env.INPUT_AFTER || 'echo ""', {
+	stdio: "inherit",
+});
