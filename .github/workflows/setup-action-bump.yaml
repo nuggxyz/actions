@@ -49,7 +49,7 @@
                                     {
                                         TAG: "${{ steps.tag_version.outputs.new_tag }}",
                                     },
-                                run: "${{ github.workspace }}/scripts/self_bump.sh ${{ env.TAG }}",
+                                run: "${{ github.workspace }}/scripts/self_bump.sh v${{ env.TAG }}",
                             },
                             {
                                 name: commit,
