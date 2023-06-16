@@ -20,7 +20,7 @@ runs:
               if [[ -f "$override_artifact" ]]; then
                   echo "Override artifact found. Moving..."
                   mkdir -p temp
-                  mv "$override_artifact" ./temp/buildrc
+                  cp "$override_artifact" ./temp/buildrc
               else
                   case "$RUNNER_ARCH" in
                   X64) arch="amd64" ;;
@@ -34,7 +34,7 @@ runs:
                   # The name of the release file will be 'os-arch.tar.gz'
                   gh release download $constant_version -p "$os_arch_pattern" --repo nuggxyz/buildrc --dir ./temp
                   tar -xzf "./temp/$os_arch_pattern" -C ./temp/
-                  mv ./temp/build/$smp_os_arch ./temp/buildrc
+                  cp ./temp/build/$smp_os_arch ./temp/buildrc
               fi
 
               # Step 2: Setup alias
