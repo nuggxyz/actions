@@ -35,7 +35,5 @@ for formula in $formulas; do
 	fi
 done
 
-formulas=$(find . -path "./*/action.yml" -name "action.yml")
-
 echo "DID_UPDATE=$DID_UPDATE" >>"$GITHUB_OUTPUT"
 echo "SCRIPT_CHANGELOG=$SCRIPT_CHANGELOG" >>"$GITHUB_OUTPUT"
