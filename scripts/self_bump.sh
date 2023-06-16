@@ -20,22 +20,18 @@ fi
 echo "Found formulas: $formulas"
 
 for formula in $formulas; do
-	found=$(grep -oE "nuggxyz/actions/.*@v[0-9]+" "$formula")
 
-	# Check if any matches were found
-	if [ -z "$found" ]; then
-		echo "Warning: No matches found in $formula"
-	else
-		for f in $found; do
-			echo "Found $f"
-			if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-				# Linux
-				sed -i "s#$f#nuggxyz/actions@${latest}#" "$formula"
-			elif [[ "$OSTYPE" == "darwin"* ]]; then
-				# Mac OSX
-				sed -i "" "s#$f#nuggxyz/actions@${latest}#" "$formula"
-			fi
+	found=$(grep -oE "nuggxyz/actions/.*@v[0-9\.]+" "$formula")
 
-		done
-	fi
+	for f in $found; do
+		echo "Found $f"
+		action_name=$(echo $f | grep -oE "nuggxyz/actions/[a-zA-Z_-]+")
+		if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+			# Linux
+			sed -i "s#${f}#${action_name}@${latest}#" "$formula"
+		elif [[ "$OSTYPE" == "darwin"* ]]; then
+			# Mac OSX
+			sed -i "" "s#${f}#${action_name}@${latest}#" "$formula"
+		fi
+	done
 done
