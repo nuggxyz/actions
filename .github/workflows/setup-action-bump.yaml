@@ -21,12 +21,6 @@
                                 with: { clean: true, fetch-depth: 0 },
                             },
                             {
-                                name: Update formula,
-                                id: script,
-                                run: "${{ github.workspace }}/scripts/action_bump.sh",
-                            },
-
-                            {
                                 name: Bump version and push tag,
                                 id: tag_version,
                                 if: "${{ steps.script.outputs.DID_UPDATE == '1' || github.event_name == 'push' }}",
@@ -40,6 +34,24 @@
                                     },
                             },
                             {
+                                name: Update formula,
+                                id: script,
+                                env:
+                                    {
+                                        TAG: "${{ steps.tag_version.outputs.new_tag }}",
+                                    },
+                                run: "${{ github.workspace }}/scripts/action_bump.sh",
+                            },
+                            {
+                                name: Update formula,
+                                id: self-bump-script,
+                                env:
+                                    {
+                                        TAG: "${{ steps.tag_version.outputs.new_tag }}",
+                                    },
+                                run: "${{ github.workspace }}/scripts/self_bump.sh ${{ env.TAG }}",
+                            },
+                            {
                                 name: commit,
                                 id: commit,
                                 if: "${{ steps.script.outputs.DID_UPDATE == '1' }}",
@@ -50,7 +62,7 @@
                                     },
                                 with:
                                     {
-                                        file_pattern: "setup-buildrc/action.yml",
+                                        file_pattern: "*/action.yml",
                                         commit_message: "(setup-action-bump) ${{ env.TAG }}",
                                         commit_author: "github-actions <41898282+github-actions[bot]@users.noreply.github.com>",
                                     },
