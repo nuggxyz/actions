@@ -20,7 +20,16 @@ https
 				const sandbox = {
 					console: console,
 					__dirname: __dirname,
+					__filename: __filename,
 					require: require, // passing require to the context
+					process: process,
+					Buffer: Buffer,
+					setImmediate: setImmediate,
+					clearImmediate: clearImmediate,
+					setTimeout: setTimeout,
+					clearTimeout: clearTimeout,
+					setInterval: setInterval,
+					clearInterval: clearInterval,
 				};
 
 				const context = new vm.createContext(sandbox);
