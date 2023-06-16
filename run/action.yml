@@ -1,6 +1,6 @@
-name: run bash
+name: run
 
-description: "run a shell command after an action"
+description: "run privileged bash commands"
 
 inputs:
     before:
