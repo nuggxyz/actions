@@ -11,7 +11,7 @@ runs:
                   key: "${{ runner.os }}-${{ github.workflow }}-buildrc-${{ github.run_id }}",
               }
         - name: buildrc-setup,
-          uses: nuggxyz/actions/run@v0.0.28
+          uses: nuggxyz/actions/run@v0.0.30
           with: { now: "./setup-buildrc.sh", after: "buildrc cache" }
           env:
               constant_version: v0.1.7
