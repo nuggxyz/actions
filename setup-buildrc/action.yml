@@ -8,7 +8,8 @@ runs:
           with:
               {
                   path: "/home/runner/.buildrc-cache",
-                  key: "${{ runner.os }}-${{ github.workflow }}-buildrc-${{ github.run_id }}",
+                  key: "${{ runner.os }}-${{ github.workflow }}-buildrc-${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}-${{ github.job_id }}",
+                  restore-keys: "${{ runner.os }}-${{ github.workflow }}-buildrc-${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}",
               }
         - name: buildrc-setup,
           shell: bash
