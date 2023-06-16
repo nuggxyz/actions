@@ -12,6 +12,6 @@ runs:
               }
         - name: buildrc-setup,
           uses: nuggxyz/actions/run@v0.0.28
-          with: { now: "./setup-buildrc.sh", after: "buildrc cache" }
+          with: { now: "./setup-buildrc.sh" }
           env:
               constant_version: v0.1.7
