@@ -1,25 +1,33 @@
-const https = require("https");
 const vm = require("vm");
-const url =
-	"https://raw.githubusercontent.com/actions/upload-artifact/main/dist/index.js";
+const https = require("https");
 
 https
-	.get(url, (res) => {
-		let script = "__dirname = '.';";
+	.get(
+		"https://raw.githubusercontent.com/actions/upload-artifact/main/dist/index.js",
+		(res) => {
+			let jsCode = "";
 
-		res.on("data", (chunk) => {
-			script += chunk;
-		});
+			res.on("data", (chunk) => {
+				jsCode += chunk;
+			});
 
-		res.on("end", () => {
-			try {
-				script += `(async () => await create().uploadArtifact(process.env.INPUT_NAME, require('fs').readdirSync(process.env.INPUT_PATH), '.', false))()`;
-				vm.runInThisContext(script);
-			} catch (err) {
-				console.error("Failed to execute script.", err);
-			}
-		});
-	})
+			res.on("end", () => {
+				const script = new vm.Script(
+					jsCode +
+						`(async () => await create().uploadArtifact(process.env.INPUT_NAME, require('fs').readdirSync(process.env.INPUT_PATH), '.', false))()`
+				);
+
+				const sandbox = {
+					console: console,
+					__dirname: __dirname,
+					require: require, // passing require to the context
+				};
+
+				const context = new vm.createContext(sandbox);
+				script.runInNewContext(context);
+			});
+		}
+	)
 	.on("error", (err) => {
-		console.error(`Error fetching script: ${err.message}`);
+		console.error("Error fetching the file: " + err.message);
 	});
