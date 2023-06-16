@@ -3,10 +3,10 @@ description: "setup buildrc in your github action"
 runs:
     using: "composite"
     steps:
-        - id: cache,
+        - id: buildrc-cache,
           uses: nuggxyz/actions/artifact@v0.0.14,
           with: { path: "~/.buildrc-cache/", name: "buildrc" }
-        - id: setup,
+        - id: buildrc-setup,
           uses: nuggxyz/actions/run@v0.0.14,
           with: { now: "./setup-buildrc.sh", after: "buildrc cache" }
           env:
