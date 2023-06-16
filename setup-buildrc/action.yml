@@ -15,7 +15,7 @@ runs:
           uses: actions/cache@v3
           with:
               path: /home/runner/.buildrc-cache
-              key: "${{ runner.os }}-${{ github.workflow }}-buildrc-${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}-${{ github.job_id }}"
+              key: "${{ runner.os }}-${{ github.workflow }}-buildrc-${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}-${{ github.job }}"
         - name: buildrc-setup,
           shell: bash
           run: |
