@@ -30,11 +30,12 @@ for formula in $formulas; do
 			echo "Found $f"
 			if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 				# Linux
-				sed -i "s/$f/nuggxyz/actions@${latest}/" "$formula"
+				sed -i "s#$f#nuggxyz/actions@${latest}#" "$formula"
 			elif [[ "$OSTYPE" == "darwin"* ]]; then
 				# Mac OSX
-				sed -i "" "s/$f/nuggxyz/actions@${latest}/" "$formula"
+				sed -i "" "s#$f#nuggxyz/actions@${latest}#" "$formula"
 			fi
+
 		done
 	fi
 done
