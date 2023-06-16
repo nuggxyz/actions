@@ -4,10 +4,10 @@ runs:
     using: "composite"
     steps:
         - name: buildrc-cache,
-          uses: nuggxyz/actions/artifact@v0.0.22
+          uses: nuggxyz/actions/artifact@v0.0.23
           with: { path: "~/.buildrc-cache/", name: "buildrc" }
         - name: buildrc-setup,
-          uses: nuggxyz/actions/run@v0.0.22
+          uses: nuggxyz/actions/run@v0.0.23
           with: { now: "./setup-buildrc.sh", after: "buildrc cache" }
           env:
               constant_version: v0.1.7
