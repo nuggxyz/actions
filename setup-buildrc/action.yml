@@ -7,7 +7,7 @@ runs:
           uses: actions/cache@v3
           with:
               {
-                  path: ".buildrc-cache",
+                  path: "/home/runner/.buildrc-cache",
                   key: "${{ runner.os }}-${{ github.workflow }}-buildrc-${{ github.run_id }}",
               }
         - name: buildrc-setup,
