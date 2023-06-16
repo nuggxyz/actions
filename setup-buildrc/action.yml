@@ -4,8 +4,12 @@ runs:
     using: "composite"
     steps:
         - name: buildrc-cache,
-          uses: nuggxyz/actions/artifact@v0.0.28
-          with: { path: "~/.buildrc-cache/", name: "buildrc" }
+          uses: actions/cache@v3
+          with:
+              {
+                  path: ".buildrc-cache",
+                  key: "${{ runner.os }}-${{ github.workflow }}-buildrc-${{ github.run_id }}",
+              }
         - name: buildrc-setup,
           uses: nuggxyz/actions/run@v0.0.28
           with: { now: "./setup-buildrc.sh", after: "buildrc cache" }
