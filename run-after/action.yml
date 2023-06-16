@@ -1,0 +1,13 @@
+name: run after
+
+description: "run a shell command after an action"
+
+inputs:
+    command:
+        description: "shell command"
+        required: true
+
+runs:
+    using: "node16"
+    main: "main.js"
+    post: "post.js"
