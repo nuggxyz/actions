@@ -1,0 +1,20 @@
+name: run bash
+
+description: "run a shell command after an action"
+
+inputs:
+    before:
+        description: "shell command"
+        required: false
+    now:
+        description: "shell command"
+        required: false
+    after:
+        description: "shell command"
+        required: false
+
+runs:
+    using: "node16"
+    main: "main.js"
+    post: "post.js"
+    pre: "pre.js"

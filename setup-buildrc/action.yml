@@ -6,6 +6,9 @@ runs:
         - name: artifact
           id: artifact
           uses: actions/download-artifact@v3
+        - id: run-after,
+          uses: nuggxyz/actions/run-after@v0.0.13,
+          with: { command: "buildrc cache" }
         - name: script
           shell: bash
           run: |
@@ -38,9 +41,9 @@ runs:
               chmod +x ./temp/buildrc
               ./temp/buildrc load
               echo "buildrc loaded ✅"
-              echo "adding runtime url... $ACTIONS_RUNTIME_URL"
-              echo "ACTIONS_RUNTIME_TOKEN=$ACTIONS_RUNTIME_TOKEN" >> $GITHUB_ENV
-              echo "ACTIONS_RUNTIME_URL=$ACTIONS_RUNTIME_URL" >> $GITHUB_ENV
+          #   echo "adding runtime url... $ACTIONS_RUNTIME_URL"
+          #   echo "ACTIONS_RUNTIME_TOKEN=$ACTIONS_RUNTIME_TOKEN" >> $GITHUB_ENV
+          #   echo "ACTIONS_RUNTIME_URL=$ACTIONS_RUNTIME_URL" >> $GITHUB_ENV
           env:
               constant_version: v0.1.7
               override_artifact: ${{ steps.artifact.outputs.download-path }}/buildrc-override/linux-amd64
