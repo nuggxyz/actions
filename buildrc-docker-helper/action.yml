@@ -12,7 +12,7 @@ runs:
                     'if [ -z "$GITHUB_TOKEN" ]; then echo "GITHUB_TOKEN is not set" && exit 1; fi;
                     if [ -z "$BUILDRC_CONTAINER_PUSH" || "$BUILDRC_CONTAINER_PUSH" != "1" ]; then echo "BUILDRC_CONTAINER_PUSH is not set" && exit 1; fi;
                     if [ -z "$BUILDRC_CONTAINER_DOCKERFILE" ]; then echo "BUILDRC_CONTAINER_DOCKERFILE is not set" && exit 1; fi;
-                    if [ -z "$BUILDRC_CONTAINER_BUILD_ARGS" ]; then echo "BUILDRC_CONTAINER_BUILD_ARGS is not set" && exit 1; fi;
+                    if [ -z "$BUILDRC_CONTAINER_BUILD_ARGS_CSV" ]; then echo "BUILDRC_CONTAINER_BUILD_ARGS_CSV is not set" && exit 1; fi;
                     if [ -z "$BUILDRC_CONTAINER_CONTEXT" ]; then echo "BUILDRC_CONTAINER_CONTEXT is not set" && exit 1; fi;
                     if [ -z "$BUILDRC_CONTAINER_PLATFORMS" ]; then echo "BUILDRC_CONTAINER_PLATFORMS is not set" && exit 1; fi;
                     if [ -z "$BUILDRC_CONTAINER_LABELS_JSON_STRING" ]; then echo "BUILDRC_CONTAINER_LABELS_JSON_STRING is not set" && exit 1; fi;
@@ -81,7 +81,7 @@ runs:
                     {
                         context: "${{ env.BUILDRC_CONTAINER_CONTEXT }}",
                         file: "${{ env.BUILDRC_CONTAINER_DOCKERFILE }}",
-                        build-args: "${{ env.BUILDRC_CONTAINER_BUILD_ARGS }}",
+                        build-args: "${{ env.BUILDRC_CONTAINER_BUILD_ARGS_CSV }}",
                         push: true,
                         tags: "${{ steps.meta.outputs.tags }}",
                         labels: "${{ steps.meta.outputs.labels }}",
