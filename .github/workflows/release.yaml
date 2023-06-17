@@ -21,6 +21,12 @@
                                 with: { clean: true, fetch-depth: 0 },
                             },
                             {
+                                name: Update formula,
+                                id: script,
+
+                                run: "${{ github.workspace }}/scripts/action_bump.sh",
+                            },
+                            {
                                 name: Bump version and push tag,
                                 id: tag_version,
                                 if: "${{ steps.script.outputs.DID_UPDATE == '1' || github.event_name == 'push' }}",
@@ -35,16 +41,8 @@
                             },
                             {
                                 name: Update formula,
-                                id: script,
-                                env:
-                                    {
-                                        TAG: "${{ steps.tag_version.outputs.new_tag }}",
-                                    },
-                                run: "${{ github.workspace }}/scripts/action_bump.sh",
-                            },
-                            {
-                                name: Update formula,
                                 id: self-bump-script,
+                                if: "${{ steps.tag_version.outputs.new_tag != '' }}",
                                 env:
                                     {
                                         TAG: "${{ steps.tag_version.outputs.new_tag }}",
