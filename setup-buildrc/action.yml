@@ -51,4 +51,4 @@ runs:
               ./temp/buildrc load
               echo "buildrc loaded ✅"
           env:
-              constant_version: v0.1.9
+              constant_version: v0.1.10
