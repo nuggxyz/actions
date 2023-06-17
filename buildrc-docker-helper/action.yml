@@ -25,7 +25,6 @@ runs:
                     if [ -z "$BUILDRC_CONTAINER_UPLOAD_TO_AWS_REPOSITORY" ]; then echo "BUILDRC_CONTAINER_UPLOAD_TO_AWS_REPOSITORY is not set" && exit 1; fi;
                     fi',
             },
-            { id: setup-buildrc, uses: nuggxyz/actions/setup-buildrc@main },
             { name: qmeu, uses: "docker/setup-qemu-action@v2" },
             { id: "buildx", uses: docker/setup-buildx-action@v2 },
             {
