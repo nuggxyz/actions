@@ -47,7 +47,7 @@ runs:
                      constant_version="$INPUT_VERSION"
                   fi
                   echo "Checking for buildrc-override... at $BUILDRC_EXEC_OVERRIDE"
-                  if [ -f "$BUILDRC_EXEC_OVERRIDE" ]; then
+                  if [ -z "$INPUT_VERSION" ] && [ -f "BUILDRC_EXEC_OVERRIDE" ]; then
                       echo "override artifact found - using in place of $constant_version 🔶"
                       mkdir -p temp
                       cp "$BUILDRC_EXEC_OVERRIDE" "$BUILDRC_PATH_DIR/buildrc"
