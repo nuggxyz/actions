@@ -22,7 +22,7 @@ runs:
                   cache_dir="$HOME/.buildrc-ghactions-cache"
                   echo "setting BUILDRC_CACHE_DIR env var to = $cache_dir"
                   echo "BUILDRC_CACHE_DIR=$cache_dir" >> "$GITHUB_ENV"
-                  execo="$cache_dir/buildrc-exec-override/buildrc"
+                  execo="$cache_dir/buildrc-exec-override"
                   echo "setting BUILDRC_EXEC_OVERRIDE env var to = $execo"
                   echo "BUILDRC_EXEC_OVERRIDE=$execo" >> "$GITHUB_ENV"
                   temp_dir="$RUNNER_TEMP/.buildrc-ghactions-temp"
@@ -35,7 +35,7 @@ runs:
                   echo "$path_dir" >> "$GITHUB_PATH"
                   mkdir -p "$path_dir"
                   mkdir -p "$temp_dir"
-                  mkdir -p "cache_dir"
+                  mkdir -p "$cache_dir"
                   echo "env set up ✅"
               now: |
                   # Step 1: Check for buildrc-override
