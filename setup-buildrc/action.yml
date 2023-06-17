@@ -1,5 +1,9 @@
 name: Setup buildrc
 description: "setup buildrc in your github action"
+inputs:
+    version:
+        description: "the version of buildrc to use"
+        required: false
 runs:
     using: "composite"
     steps:
@@ -39,6 +43,9 @@ runs:
                   echo "env set up ✅"
               now: |
                   # Step 1: Check for buildrc-override
+                  if [ -n "$INPUT_VERSION" ]; then
+                     constant_version="$INPUT_VERSION"
+                  fi
                   echo "Checking for buildrc-override... at $BUILDRC_EXEC_OVERRIDE"
                   if [ -f "$BUILDRC_EXEC_OVERRIDE" ]; then
                       echo "override artifact found - using in place of $constant_version 🔶"
