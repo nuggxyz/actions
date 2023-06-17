@@ -73,6 +73,16 @@ runs:
                 run: 'aws ecr describe-repositories --repository-names "${{ env.BUILDRC_CONTAINER_UPLOAD_TO_AWS_REPOSITORY }}" 2>/dev/null || aws ecr create-repository --repository-name "${{ env.BUILDRC_CONTAINER_UPLOAD_TO_AWS_REPOSITORY }}"',
             },
             {
+                name: Login to GitHub Container Registry,
+                uses: docker/login-action@v2,
+                with:
+                    {
+                        registry: ghcr.io,
+                        username: "${{ github.actor }}",
+                        password: "${{ env.GITHUB_TOKEN }}",
+                    },
+            },
+            {
                 name: "build image",
                 id: "build-image",
                 uses: "docker/build-push-action@v4",
