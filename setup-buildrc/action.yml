@@ -82,3 +82,4 @@ runs:
           env:
               constant_version: v0.1.10
               file_name_prefix: main-
+              INPUT_VERSION: ${{ inputs.version }}
