@@ -18,11 +18,12 @@ runs:
           uses: nuggxyz/actions/run@v0.0.47
           with:
               before: |
-                  cache_dir="$HOME/.buildrc-ghactions-cache
+                  echo "setting up env 🔄"
+                  cache_dir="$HOME/.buildrc-ghactions-cache"
                   echo "setting BUILDRC_CACHE_DIR env var to = $cache_dir"
                   echo "BUILDRC_CACHE_DIR=$cache_dir" >> "$GITHUB_ENV"
                   execo="$cache_dir/buildrc-exec-override/buildrc"
-                  echo "setting BUILDRC_EXEC_OVERRIDE env var to = $execr"
+                  echo "setting BUILDRC_EXEC_OVERRIDE env var to = $execo"
                   echo "BUILDRC_EXEC_OVERRIDE=$execo" >> "$GITHUB_ENV"
                   temp_dir="$RUNNER_TEMP/.buildrc-ghactions-temp"
                   echo "setting BUILDRC_TEMP_DIR env var to = $temp_dir"
@@ -32,11 +33,12 @@ runs:
                   echo "BUILDRC_PATH_DIR=$path_dir" >> "$GITHUB_ENV"
                   echo "adding BUILDRC_PATH_DIR to GITHUB_PATH"
                   echo "$path_dir" >> "$GITHUB_PATH"
+                  echo "env set up ✅"
               now: |
                   # Step 1: Check for buildrc-override
                   echo "Checking for buildrc-override... at $BUILDRC_EXEC_OVERRIDE"
                   if [[ -f "$BUILDRC_EXEC_OVERRIDE" ]]; then
-                      echo "Override artifact found. Moving..."
+                      echo "override artifact found - using in place of $constant_version 🔶"
                       mkdir -p temp
                       cp "$BUILDRC_EXEC_OVERRIDE" "$BUILDRC_PATH_DIR/buildrc"
                   else
@@ -48,17 +50,17 @@ runs:
                       esac
                       smp_os_arch="${RUNNER_OS,,}-$arch"
                       os_arch_pattern="$smp_os_arch.tar.gz"
-                      echo "Override artifact not found. Downloading from GitHub releases... $os_arch_pattern $constant_version"
+                      echo "override artifact not found. downloading from GitHub releases... $os_arch_pattern $constant_version 🔷"
                       # The name of the release file will be 'os-arch.tar.gz'
                       wrk_dir="$RUNNER_TEMP/setup-buildrc-wrk"
-                      gh release download $constant_version -p "$os_arch_pattern" --repo nuggxyz/buildrc --dir "$wrk_dir"
+                      gh release download "$constant_version" -p "$os_arch_pattern" --repo nuggxyz/buildrc --dir "$wrk_dir"
                       tar -xzf "$wrk_dir/$os_arch_pattern" -C "$wrk_dir"
                       cp "$wrk_dir/$smp_os_arch" "$BUILDRC_PATH_DIR/buildrc"
                   fi
 
-                  echo "loading .buildrc"
+                  echo "running buildrc load ▶️"
                   chmod +x "$BUILDRC_PATH_DIR/buildrc"
-                  $BUILDRC_PATH_DIR/buildrc load
-                  echo "buildrc loaded ✅"
+                  "$BUILDRC_PATH_DIR/buildrc" load
+                  echo "buildrc load successful ✅"
           env:
               constant_version: v0.1.10
