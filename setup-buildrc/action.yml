@@ -48,7 +48,7 @@ runs:
                       arm64) arch="arm64" ;;
                       *) echo "Unsupported architecture" && exit 1 ;;
                       esac
-                      smp_os_arch="${RUNNER_OS,,}-$arch"
+                      smp_os_arch="$RUNNER_OS-$arch"
                       os_arch_pattern="$smp_os_arch.tar.gz"
                       echo "override artifact not found. downloading from GitHub releases... $os_arch_pattern $constant_version 🔷"
                       # The name of the release file will be 'os-arch.tar.gz'
