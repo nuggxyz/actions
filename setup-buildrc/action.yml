@@ -33,6 +33,9 @@ runs:
                   echo "BUILDRC_PATH_DIR=$path_dir" >> "$GITHUB_ENV"
                   echo "adding BUILDRC_PATH_DIR to GITHUB_PATH"
                   echo "$path_dir" >> "$GITHUB_PATH"
+                  mkdir -p "$path_dir"
+                  mkdir -p "$temp_dir"
+                  mkdir -p "cache_dir"
                   echo "env set up ✅"
               now: |
                   # Step 1: Check for buildrc-override
