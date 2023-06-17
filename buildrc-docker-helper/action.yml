@@ -14,7 +14,7 @@ runs:
                     if [ -z "$BUILDRC_CONTAINER_DOCKERFILE" ]; then echo "BUILDRC_CONTAINER_DOCKERFILE is not set" && exit 1; fi;
                     if [ -z "$BUILDRC_CONTAINER_BUILD_ARGS_CSV" ]; then echo "BUILDRC_CONTAINER_BUILD_ARGS_CSV is not set" && exit 1; fi;
                     if [ -z "$BUILDRC_CONTAINER_CONTEXT" ]; then echo "BUILDRC_CONTAINER_CONTEXT is not set" && exit 1; fi;
-                    if [ -z "$BUILDRC_CONTAINER_PLATFORMS" ]; then echo "BUILDRC_CONTAINER_PLATFORMS is not set" && exit 1; fi;
+                    if [ -z "$BUILDRC_CONTAINER_PLATFORMS_CSV" ]; then echo "BUILDRC_CONTAINER_PLATFORMS_CSV is not set" && exit 1; fi;
                     if [ -z "$BUILDRC_CONTAINER_LABELS_JSON_STRING" ]; then echo "BUILDRC_CONTAINER_LABELS_JSON_STRING is not set" && exit 1; fi;
                     if [ -z "$BUILDRC_CONTAINER_TAGS_JSON_STRING" ]; then echo "BUILDRC_CONTAINER_TAGS_JSON_STRING is not set" && exit 1; fi;
                     if [ -z "$BUILDRC_CONTAINER_UPLOAD_TO_AWS" ]; then echo "BUILDRC_CONTAINER_UPLOAD_TO_AWS is not set" && exit 1; fi;
@@ -87,7 +87,7 @@ runs:
                         labels: "${{ steps.meta.outputs.labels }}",
                         cache-from: "type=local,src=/tmp/.buildx-cache",
                         cache-to: "type=local,dest=/tmp/.buildx-cache,mode=max",
-                        platforms: "${{ env.BUILDRC_CONTAINER_PLATFORMS }}",
+                        platforms: "${{ env.BUILDRC_CONTAINER_PLATFORMS_CSV }}",
                         github-token: "${{ env.GITHUB_TOKEN }}",
                     },
             },
