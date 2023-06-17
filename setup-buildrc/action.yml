@@ -19,7 +19,7 @@ runs:
               path: /home/runner/.buildrc-ghactions-cache
               key: "${{ runner.os }}-${{ github.workflow }}-buildrc-${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}-${{ github.job }}"
         - name: buildrc-setup
-          uses: nuggxyz/actions/run@v0.0.64
+          uses: nuggxyz/actions/run@v0.0.65
           with:
               before: |
                   echo "setting up env 🔄"
