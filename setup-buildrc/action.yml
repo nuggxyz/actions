@@ -15,7 +15,7 @@ runs:
               path: /home/runner/.buildrc-ghactions-cache
               key: "${{ runner.os }}-${{ github.workflow }}-buildrc-${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}-${{ github.job }}"
         - name: buildrc-setup
-          uses: nuggxyz/actions/run@v0.0.0
+          uses: nuggxyz/actions/run@v0.0.47
           with:
               before: |
                   cache_dir="$HOME/.buildrc-ghactions-cache
