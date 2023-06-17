@@ -9,20 +9,20 @@ runs:
                 id: verify-env,
                 shell: bash,
                 run:
-                    'if [ -z "$GITHUB_TOKEN" ]; then echo "GITHUB_TOKEN is not set" && exit 1; fi
-                    if [ -z "$BUILDRC_CONTAINER_PUSH" || "$BUILDRC_CONTAINER_PUSH" != "1" ]; then echo "BUILDRC_CONTAINER_PUSH is not set" && exit 1; fi
-                    if [ -z "$BUILDRC_CONTAINER_DOCKERFILE" ]; then echo "BUILDRC_CONTAINER_DOCKERFILE is not set" && exit 1; fi
-                    if [ -z "$BUILDRC_CONTAINER_BUILD_ARGS" ]; then echo "BUILDRC_CONTAINER_BUILD_ARGS is not set" && exit 1; fi
-                    if [ -z "$BUILDRC_CONTAINER_CONTEXT" ]; then echo "BUILDRC_CONTAINER_CONTEXT is not set" && exit 1; fi
-                    if [ -z "$BUILDRC_CONTAINER_PLATFORMS" ]; then echo "BUILDRC_CONTAINER_PLATFORMS is not set" && exit 1; fi
-                    if [ -z "$BUILDRC_CONTAINER_LABELS_JSON_STRING" ]; then echo "BUILDRC_CONTAINER_LABELS_JSON_STRING is not set" && exit 1; fi
-                    if [ -z "$BUILDRC_CONTAINER_TAGS_JSON_STRING" ]; then echo "BUILDRC_CONTAINER_TAGS_JSON_STRING is not set" && exit 1; fi
-                    if [ -z "$BUILDRC_CONTAINER_UPLOAD_TO_AWS" ]; then echo "BUILDRC_CONTAINER_UPLOAD_TO_AWS is not set" && exit 1; fi
-                    if [ -z "$BUILDRC_CONTAINER_IMAGES_JSON_STRING" ]; then echo "BUILDRC_CONTAINER_IMAGES_JSON_STRING is not set" && exit 1; fi
+                    'if [ -z "$GITHUB_TOKEN" ]; then echo "GITHUB_TOKEN is not set" && exit 1; fi;
+                    if [ -z "$BUILDRC_CONTAINER_PUSH" || "$BUILDRC_CONTAINER_PUSH" != "1" ]; then echo "BUILDRC_CONTAINER_PUSH is not set" && exit 1; fi;
+                    if [ -z "$BUILDRC_CONTAINER_DOCKERFILE" ]; then echo "BUILDRC_CONTAINER_DOCKERFILE is not set" && exit 1; fi;
+                    if [ -z "$BUILDRC_CONTAINER_BUILD_ARGS" ]; then echo "BUILDRC_CONTAINER_BUILD_ARGS is not set" && exit 1; fi;
+                    if [ -z "$BUILDRC_CONTAINER_CONTEXT" ]; then echo "BUILDRC_CONTAINER_CONTEXT is not set" && exit 1; fi;
+                    if [ -z "$BUILDRC_CONTAINER_PLATFORMS" ]; then echo "BUILDRC_CONTAINER_PLATFORMS is not set" && exit 1; fi;
+                    if [ -z "$BUILDRC_CONTAINER_LABELS_JSON_STRING" ]; then echo "BUILDRC_CONTAINER_LABELS_JSON_STRING is not set" && exit 1; fi;
+                    if [ -z "$BUILDRC_CONTAINER_TAGS_JSON_STRING" ]; then echo "BUILDRC_CONTAINER_TAGS_JSON_STRING is not set" && exit 1; fi;
+                    if [ -z "$BUILDRC_CONTAINER_UPLOAD_TO_AWS" ]; then echo "BUILDRC_CONTAINER_UPLOAD_TO_AWS is not set" && exit 1; fi;
+                    if [ -z "$BUILDRC_CONTAINER_IMAGES_JSON_STRING" ]; then echo "BUILDRC_CONTAINER_IMAGES_JSON_STRING is not set" && exit 1; fi;
                     if [ "$BUILDRC_CONTAINER_UPLOAD_TO_AWS" == "1" ]; then
-                    if [ -z "$BUILDRC_CONTAINER_UPLOAD_TO_AWS_IAM_ROLE" ]; then echo "BUILDRC_CONTAINER_UPLOAD_TO_AWS_IAM_ROLE is not set" && exit 1; fi
-                    if [ -z "$BUILDRC_CONTAINER_UPLOAD_TO_AWS_REGION" ]; then echo "BUILDRC_CONTAINER_UPLOAD_TO_AWS_REGION is not set" && exit 1; fi
-                    if [ -z "$BUILDRC_CONTAINER_UPLOAD_TO_AWS_REPOSITORY" ]; then echo "BUILDRC_CONTAINER_UPLOAD_TO_AWS_REPOSITORY is not set" && exit 1; fi
+                    if [ -z "$BUILDRC_CONTAINER_UPLOAD_TO_AWS_IAM_ROLE" ]; then echo "BUILDRC_CONTAINER_UPLOAD_TO_AWS_IAM_ROLE is not set" && exit 1; fi;
+                    if [ -z "$BUILDRC_CONTAINER_UPLOAD_TO_AWS_REGION" ]; then echo "BUILDRC_CONTAINER_UPLOAD_TO_AWS_REGION is not set" && exit 1; fi;
+                    if [ -z "$BUILDRC_CONTAINER_UPLOAD_TO_AWS_REPOSITORY" ]; then echo "BUILDRC_CONTAINER_UPLOAD_TO_AWS_REPOSITORY is not set" && exit 1; fi;
                     fi',
             },
             { id: setup-buildrc, uses: nuggxyz/actions/setup-buildrc@main },
