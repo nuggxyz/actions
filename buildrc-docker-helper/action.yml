@@ -23,8 +23,7 @@ runs:
                     if [ -z "$BUILDRC_CONTAINER_UPLOAD_TO_AWS_IAM_ROLE" ]; then echo "BUILDRC_CONTAINER_UPLOAD_TO_AWS_IAM_ROLE is not set" && exit 1; fi;
                     if [ -z "$BUILDRC_CONTAINER_UPLOAD_TO_AWS_REGION" ]; then echo "BUILDRC_CONTAINER_UPLOAD_TO_AWS_REGION is not set" && exit 1; fi;
                     if [ -z "$BUILDRC_CONTAINER_UPLOAD_TO_AWS_REPOSITORY" ]; then echo "BUILDRC_CONTAINER_UPLOAD_TO_AWS_REPOSITORY is not set" && exit 1; fi;
-                    else
-                    echo "BUILDRC_CONTAINER_UPLOAD_TO_AWS_REGION=us-east-1" >> $GITHUB_ENV; fi',
+                    fi',
             },
             { name: qmeu, uses: "docker/setup-qemu-action@v2" },
             { id: "buildx", uses: docker/setup-buildx-action@v2 },
@@ -53,7 +52,7 @@ runs:
             {
                 id: "aws-auth",
                 uses: "aws-actions/configure-aws-credentials@v2",
-                if: "${{ env.BUILDRC_CONTAINER_UPLOAD_TO_AWS }} == '1'",
+                if: "${{ env.BUILDRC_CONTAINER_UPLOAD_TO_AWS == '1' }}",
                 with:
                     {
                         role-to-assume: "${{ env.BUILDRC_CONTAINER_UPLOAD_TO_AWS_IAM_ROLE }}",
@@ -64,14 +63,14 @@ runs:
             {
                 name: Login to Amazon ECR,
                 id: login-ecr,
-                if: "${{ env.BUILDRC_CONTAINER_UPLOAD_TO_AWS }} == '1'",
+                if: "${{ env.BUILDRC_CONTAINER_UPLOAD_TO_AWS == '1' }}",
                 uses: aws-actions/amazon-ecr-login@v1,
             },
             {
                 name: "Ensure ECR repository exists",
                 id: "ensure-ecr-repo",
                 shell: bash,
-                if: "${{ env.BUILDRC_CONTAINER_UPLOAD_TO_AWS }} == '1'",
+                if: "${{ env.BUILDRC_CONTAINER_UPLOAD_TO_AWS == '1' }}",
                 run: 'aws ecr describe-repositories --repository-names "${{ env.BUILDRC_CONTAINER_UPLOAD_TO_AWS_REPOSITORY }}" 2>/dev/null || aws ecr create-repository --repository-name "${{ env.BUILDRC_CONTAINER_UPLOAD_TO_AWS_REPOSITORY }}"',
             },
             {
