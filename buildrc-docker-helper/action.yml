@@ -2,8 +2,7 @@ name: buildrc-docker-helper
 description: "This action checks out the code, sets up Buildx and Qemu, generates Docker metadata, logs into Amazon ECR, ensures the ECR repository exists, and builds and pushes the Docker image."
 runs:
     using: "composite"
-    steps:
-        [
+    steps: [
             { uses: actions/checkout@v3 },
             {
                 id: verify-env,
@@ -27,16 +26,16 @@ runs:
             },
             { name: qmeu, uses: "docker/setup-qemu-action@v2" },
             { id: "buildx", uses: docker/setup-buildx-action@v2 },
-            {
-                name: Cache Docker layers,
-                uses: actions/cache@v3,
-                with:
-                    {
-                        path: "/tmp/.buildx-cache",
-                        key: "${{ runner.os }}-buildx-${{ github.sha }}",
-                        restore-keys: "${{ runner.os }}-buildx-",
-                    },
-            },
+            # {
+            #     name: Cache Docker layers,
+            #     uses: actions/cache@v3,
+            #     with:
+            #         {
+            #             path: "/tmp/.buildx-cache",
+            #             key: "${{ runner.os }}-buildx-${{ github.sha }}",
+            #             restore-keys: "${{ runner.os }}-buildx-",
+            #         },
+            # },
             {
                 name: Generate Docker metadata,
                 id: meta,
@@ -77,16 +76,15 @@ runs:
                 name: "build image",
                 id: "build-image",
                 uses: "docker/build-push-action@v4",
-                with:
-                    {
+                with: {
                         context: "${{ env.BUILDRC_CONTAINER_CONTEXT }}",
                         file: "${{ env.BUILDRC_CONTAINER_DOCKERFILE }}",
                         build-args: "${{ env.BUILDRC_CONTAINER_BUILD_ARGS_CSV }}",
                         push: true,
                         tags: "${{ steps.meta.outputs.tags }}",
                         labels: "${{ steps.meta.outputs.labels }}",
-                        cache-from: "type=local,src=/tmp/.buildx-cache",
-                        cache-to: "type=local,dest=/tmp/.buildx-cache,mode=max",
+                        # cache-from: "type=local,src=/tmp/.buildx-cache",
+                        # cache-to: "type=local,dest=/tmp/.buildx-cache,mode=max",
                         platforms: "${{ env.BUILDRC_CONTAINER_PLATFORMS_CSV }}",
                         github-token: "${{ env.GITHUB_TOKEN }}",
                     },
