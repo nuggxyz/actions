@@ -3,6 +3,7 @@
 auto_version="$1"
 file_name_prefix="$2"
 INPUT_VERSION="$3"
+prerelease_id="$4"
 
 check_raw="0"
 check_version="1"
@@ -37,9 +38,14 @@ else
 	smp_os_arch="$os-$arch"
 	os_arch_pattern="$file_name_prefix$smp_os_arch.tar.gz"
 	echo "override artifact not found. downloading from GitHub releases... $os_arch_pattern $auto_version 🔷"
-	# The name of the release file will be 'os-arch.tar.gz'
+	if [ -z "$prerelease_id" ]; then
+		echo "release[$auto_version] found - downloading release artifact $os_arch_pattern"
+		gh release download "$auto_version" -p "$os_arch_pattern" --repo nuggxyz/buildrc --dir "$wrk_dir" --clobber --archive-format=tar.gz
+	else
+		echo "prerelease_id[$prerelease_id] found - downloading prerelease artifact $os_arch_pattern"
+		gh release download "$prerelease_id" -p "$os_arch_pattern" --repo nuggxyz/buildrc --dir "$wrk_dir" --clobber --archive-format=tar.gz
+	fi
 	wrk_dir="$RUNNER_TEMP/setup-buildrc-wrk"
-	gh release download "$auto_version" -p "$os_arch_pattern" --repo nuggxyz/buildrc --dir "$wrk_dir"
 	tar -xzf "$wrk_dir/$os_arch_pattern" -C "$wrk_dir"
 	cp "$wrk_dir/$file_name_prefix$smp_os_arch" "$BUILDRC_PATH_DIR/buildrc"
 fi
