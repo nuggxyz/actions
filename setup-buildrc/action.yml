@@ -9,12 +9,12 @@ runs:
     using: "composite"
     steps:
         - name: workflow-cache
-          uses: nuggxyz/actions/workflow-cache@v0.0.73
+          uses: nuggxyz/actions/workflow-cache@v0.0.74
           with:
               path: "/home/runner/.buildrc-ghactions-cache"
               name: "setup-buildrc"
         - name: buildrc-setup
-          uses: nuggxyz/actions/run@v0.0.73
+          uses: nuggxyz/actions/run@v0.0.74
           with:
               before: |
                   echo "setting up env 🔄"
