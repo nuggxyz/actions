@@ -73,6 +73,24 @@ runs:
                   chmod +x "$BUILDRC_PATH_DIR/buildrc"
                   "$BUILDRC_PATH_DIR/buildrc" load
                   echo "buildrc load successful ✅"
+
+                  if [ -n "$INPUT_VERSION" ]; then
+                      echo "checking buildrc version 🔄"
+                      if [ -z "$INPUT_VERSION" ]; then
+                        echo "no version specified - using $auto_version"
+                        got=$("$BUILDRC_PATH_DIR/buildrc" version)
+                        want="$auto_version"
+                      else
+                        echo "version specified - using $INPUT_VERSION"
+                        got=$("$BUILDRC_PATH_DIR/buildrc" version --raw)
+                        want="$INPUT_VERSION"
+                      fi
+                        if [ "$got" != "$want" ]; then
+                            echo "buildrc version mismatch - wanted $want but got $got"
+                            exit 1
+                        fi
+                        echo "buildrc version check successful ✅ - $got"
+                  fi
           env:
               auto_version: v0.1.12
               file_name_prefix: main-
