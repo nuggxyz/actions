@@ -40,10 +40,10 @@ else
 	echo "override artifact not found. downloading from GitHub releases... $os_arch_pattern $auto_version 🔷"
 	if [ -z "$prerelease_id" ]; then
 		echo "release[$auto_version] found - downloading release artifact $os_arch_pattern"
-		gh release download "$auto_version" -p "$os_arch_pattern" --repo nuggxyz/buildrc --dir "$wrk_dir" --clobber --archive-format=tar.gz
+		gh release download "$auto_version" -p "$os_arch_pattern" --repo nuggxyz/buildrc --dir "$wrk_dir" --clobber --archive tar.gz
 	else
 		echo "prerelease_id[$prerelease_id] found - downloading prerelease artifact $os_arch_pattern"
-		gh release download "$prerelease_id" -p "$os_arch_pattern" --repo nuggxyz/buildrc --dir "$wrk_dir" --clobber --archive-format=tar.gz
+		gh release download "$prerelease_id" -p "$os_arch_pattern" --repo nuggxyz/buildrc --dir "$wrk_dir" --clobber --archive tar.gz
 	fi
 	wrk_dir="$RUNNER_TEMP/setup-buildrc-wrk"
 	tar -xzf "$wrk_dir/$os_arch_pattern" -C "$wrk_dir"
