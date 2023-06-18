@@ -9,7 +9,7 @@ check_version="1"
 # Step 1: Check for buildrc-override
 if [ -n "$INPUT_VERSION" ]; then
 	auto_version="$INPUT_VERSION"
-	# using grep, if the version is not in the format v0.1.2, then we assume it is a raw version
+	# if the version is not in the format v0.1.2, then we assume it is a raw version
 	if ! echo "$auto_version" | grep -qE "^v[0-9]+\.[0-9]+\.[0-9]+$"; then
 		check_raw="1"
 	fi
@@ -53,7 +53,7 @@ if [ "$check_version" == "1" ]; then
 	echo "checking buildrc version 🔄"
 	if [ "$check_raw" == "1" ]; then
 		echo "checking raw version"
-		got=$("$BUILDRC_PATH_DIR/buildrc" version --raw --quiet)
+		got=$("$wrk_dir/$file_name_prefix$smp_os_arch" version --raw --quiet)
 		want="$auto_version"
 	else
 		echo "checking semver version"
