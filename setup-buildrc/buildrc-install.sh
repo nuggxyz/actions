@@ -69,11 +69,11 @@ if [ "$check_version" == "1" ]; then
 	fi
 
 	# strip the v from the version number
-	actual_version=${actual_version#"v"}
+	want=${current_version#"v"}
 
 	# If the actual version doesn't match the expected version, throw an error
-	if [ "$actual_version" != "$current_version" ]; then
-		echo "buildrc version mismatch - wanted $current_version but got $actual_version"
+	if [ "$actual_version" != "$want" ]; then
+		echo "buildrc version mismatch - wanted $want but got $actual_version"
 		exit 1
 	fi
 
