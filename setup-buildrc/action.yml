@@ -77,11 +77,11 @@ runs:
                   echo "checking buildrc version 🔄"
                   if [ -z "$INPUT_VERSION" ]; then
                     echo "no version specified - using $auto_version"
-                    got=$("$BUILDRC_PATH_DIR/buildrc" version)
+                    got=$("$BUILDRC_PATH_DIR/buildrc" version --quiet)
                     want="$auto_version"
                   else
                     echo "version specified - using $INPUT_VERSION"
-                    got=$("$BUILDRC_PATH_DIR/buildrc" version --raw)
+                    got=$("$BUILDRC_PATH_DIR/buildrc" version --raw --quiet)
                     want="$INPUT_VERSION"
                   fi
                     if [ "$got" != "$want" ]; then
