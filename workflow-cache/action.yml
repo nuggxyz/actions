@@ -10,6 +10,11 @@ inputs:
 runs:
     using: "composite"
     steps:
+        - name: mkdir
+          uses: nuggxyz/actions/run@v0.0.0
+          with:
+              before: |
+                  mkdir -p "${{ inputs.path }}"
         - name: restore-previous
           uses: actions/cache/restore@v3
           id: restore

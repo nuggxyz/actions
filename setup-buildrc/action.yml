@@ -12,7 +12,7 @@ runs:
           uses: nuggxyz/actions/workflow-cache@v0.0.73
           with:
               path: "/home/runner/.buildrc-ghactions-cache"
-              key: "setup-buildrc"
+              name: "setup-buildrc"
         - name: buildrc-setup
           uses: nuggxyz/actions/run@v0.0.73
           with:
