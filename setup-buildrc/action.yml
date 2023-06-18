@@ -4,6 +4,7 @@ inputs:
     version:
         description: "the version of buildrc to use"
         required: false
+
 runs:
     using: "composite"
     steps:
@@ -36,14 +37,20 @@ runs:
                   mkdir -p "$cache_dir"
                   echo "env set up ✅"
               now: |
+                  check_raw="0"
+                  check_version="1"
                   # Step 1: Check for buildrc-override
                   if [ -n "$INPUT_VERSION" ]; then
                      auto_version="$INPUT_VERSION"
+                        if [[ "$INPUT_VERSION" == *-* ]] || [[ "$INPUT_VERSION" == *+* ]]; then
+                            check_raw="1"
+                        fi
                   fi
                   echo "Checking for buildrc-override... at $BUILDRC_EXEC_OVERRIDE"
                   if [ -z "$INPUT_VERSION" ] && [ -f "$BUILDRC_EXEC_OVERRIDE" ]; then
                       echo "override artifact found - using in place of $auto_version 🔶"
                       mkdir -p temp
+                      check_version="0"
                       cp "$BUILDRC_EXEC_OVERRIDE" "$BUILDRC_PATH_DIR/buildrc"
                   else
                       case "$RUNNER_ARCH" in
@@ -74,21 +81,25 @@ runs:
                   "$BUILDRC_PATH_DIR/buildrc" load
                   echo "buildrc load successful ✅"
 
-                  echo "checking buildrc version 🔄"
-                  if [ -z "$INPUT_VERSION" ]; then
-                    echo "no version specified - using $auto_version"
-                    got=$("$BUILDRC_PATH_DIR/buildrc" version --quiet)
-                    want="$auto_version"
-                  else
-                    echo "version specified - using $INPUT_VERSION"
-                    got=$("$BUILDRC_PATH_DIR/buildrc" version --raw --quiet)
-                    want="$INPUT_VERSION"
-                  fi
-                    if [ "$got" != "$want" ]; then
-                        echo "buildrc version mismatch - wanted $want but got $got"
-                        exit 1
+                    if [ "$check_version" == "1" ]; then
+                        echo "checking buildrc version 🔄"
+                        if [ "$check_raw" == "1" ]; then
+                            echo "checking raw version"
+                            got=$("$BUILDRC_PATH_DIR/buildrc" version --raw --quiet)
+                            want="$auto_version"
+                        else
+                            echo "checking semver version"
+                            got=$("$BUILDRC_PATH_DIR/buildrc" version --quiet)
+                            want="$auto_version"
+                        fi
+                        if [ "$got" != "$want" ]; then
+                            echo "buildrc version mismatch - wanted $want but got $got"
+                            exit 1
+                        fi
+                        echo "buildrc version check successful ✅ - $got"
                     fi
-                    echo "buildrc version check successful ✅ - $got"
+                  echo "checking buildrc version 🔄"
+
           env:
               auto_version: v0.1.12
               file_name_prefix: main-
