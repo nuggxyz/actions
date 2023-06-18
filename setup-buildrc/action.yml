@@ -9,12 +9,12 @@ runs:
     using: "composite"
     steps:
         - name: workflow-cache
-          uses: nuggxyz/actions/workflow-cache@v0.0.74
+          uses: nuggxyz/actions/workflow-cache@v0.0.75
           with:
               path: "/home/runner/.buildrc-ghactions-cache"
               name: "setup-buildrc"
         - name: buildrc-setup
-          uses: nuggxyz/actions/run@v0.0.74
+          uses: nuggxyz/actions/run@v0.0.75
           with:
               before: "${{ github.action_path }}/buildrc-init-env.sh"
               now: "${{ github.action_path }}/buildrc-install.sh ${{ env.auto_version }} ${{ env.file_name_prefix }} ${{ inputs.version }}"
