@@ -25,8 +25,8 @@ if [ -z "$input_version" ] && [ -f "$BUILDRC_EXEC_OVERRIDE" ]; then
 	cp "$BUILDRC_EXEC_OVERRIDE" "$BUILDRC_PATH_DIR/buildrc"
 else
 	# Mapping environment variables to usable variables
-	arch_map=(["X64"]="amd64" ["arm"]="armv7" ["arm64"]="arm64")
-	os_map=(["Linux"]="linux" ["MacOS"]="darwin" ["Darwin"]="darwin" ["Windows"]="windows")
+	declare -A arch_map=(["X64"]="amd64" ["arm"]="armv7" ["arm64"]="arm64")
+	declare -A os_map=(["Linux"]="linux" ["MacOS"]="darwin" ["Darwin"]="darwin" ["Windows"]="windows")
 
 	arch=${arch_map["$RUNNER_ARCH"]}
 	os=${os_map["$RUNNER_OS"]}
