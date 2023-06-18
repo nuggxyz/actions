@@ -20,4 +20,4 @@ runs:
               now: "${{ github.action_path }}/buildrc-install.sh ${{ env.auto_version }} ${{ env.file_name_prefix }} ${{ inputs.version }}"
           env:
               auto_version: v0.1.12
-              file_name_prefix: main-
+              file_name_prefix: buildrc-
