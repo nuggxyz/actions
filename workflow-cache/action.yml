@@ -1,0 +1,23 @@
+name: workflow-cache
+description: "use this action to cache a directory for the duration of a workflow"
+inputs:
+    name:
+        description: "the unique id for the cache"
+        required: false
+    path:
+        description: "the path to use"
+        required: false
+runs:
+    using: "composite"
+    steps:
+        - name: restore-previous
+          uses: actions/cache/restore@v3
+          id: restore
+          with:
+              path: "${{ inputs.path }}"
+              key: "${{ runner.os }}-${{ github.workflow }}-${{ inputs.name }}-${{ github.run_id }}-${{ github.run_number }}-"
+        - name: override-previous
+          uses: actions/cache@v3
+          with:
+              path: "${{ inputs.path }}"
+              key: "${{ runner.os }}-${{ github.workflow }}-${{ inputs.name }}-${{ github.run_id }}-${{ github.run_number }}-${{ github.job }}"

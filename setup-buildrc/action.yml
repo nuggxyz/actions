@@ -1,4 +1,4 @@
-name: Setup buildrc
+name: setup buildrc
 description: "setup buildrc in your github action"
 inputs:
     version:
@@ -7,19 +7,13 @@ inputs:
 runs:
     using: "composite"
     steps:
-        - name: buildrc-cache
-          uses: actions/cache/restore@v3
-          id: cache1
+        - name: workflow-cache
+          uses: nuggxyz/actions/workflow-cache@v0.0.68
           with:
               path: "/home/runner/.buildrc-ghactions-cache"
-              key: "${{ runner.os }}-${{ github.workflow }}-buildrc-${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}"
-        - name: buildrc-cache-save
-          uses: actions/cache@v3
-          with:
-              path: /home/runner/.buildrc-ghactions-cache
-              key: "${{ runner.os }}-${{ github.workflow }}-buildrc-${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}-${{ github.job }}"
+              key: "setup-buildrc"
         - name: buildrc-setup
-          uses: nuggxyz/actions/run@vv0.0.68
+          uses: nuggxyz/actions/run@v0.0.68
           with:
               before: |
                   echo "setting up env 🔄"
@@ -44,11 +38,11 @@ runs:
               now: |
                   # Step 1: Check for buildrc-override
                   if [ -n "$INPUT_VERSION" ]; then
-                     constant_version="$INPUT_VERSION"
+                     auto_version="$INPUT_VERSION"
                   fi
                   echo "Checking for buildrc-override... at $BUILDRC_EXEC_OVERRIDE"
                   if [ -z "$INPUT_VERSION" ] && [ -f "$BUILDRC_EXEC_OVERRIDE" ]; then
-                      echo "override artifact found - using in place of $constant_version 🔶"
+                      echo "override artifact found - using in place of $auto_version 🔶"
                       mkdir -p temp
                       cp "$BUILDRC_EXEC_OVERRIDE" "$BUILDRC_PATH_DIR/buildrc"
                   else
@@ -67,10 +61,10 @@ runs:
                       esac
                       smp_os_arch="$os-$arch"
                       os_arch_pattern="$file_name_prefix$smp_os_arch.tar.gz"
-                      echo "override artifact not found. downloading from GitHub releases... $os_arch_pattern $constant_version 🔷"
+                      echo "override artifact not found. downloading from GitHub releases... $os_arch_pattern $auto_version 🔷"
                       # The name of the release file will be 'os-arch.tar.gz'
                       wrk_dir="$RUNNER_TEMP/setup-buildrc-wrk"
-                      gh release download "$constant_version" -p "$os_arch_pattern" --repo nuggxyz/buildrc --dir "$wrk_dir"
+                      gh release download "$auto_version" -p "$os_arch_pattern" --repo nuggxyz/buildrc --dir "$wrk_dir"
                       tar -xzf "$wrk_dir/$os_arch_pattern" -C "$wrk_dir"
                       cp "$wrk_dir/$file_name_prefix$smp_os_arch" "$BUILDRC_PATH_DIR/buildrc"
                   fi
@@ -80,6 +74,6 @@ runs:
                   "$BUILDRC_PATH_DIR/buildrc" load
                   echo "buildrc load successful ✅"
           env:
-              constant_version: v0.1.12
+              auto_version: v0.1.12
               file_name_prefix: main-
               INPUT_VERSION: ${{ inputs.version }}
