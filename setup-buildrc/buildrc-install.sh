@@ -68,6 +68,9 @@ if [ "$check_version" == "1" ]; then
 		actual_version=$("$BUILDRC_PATH_DIR/buildrc" version --quiet)
 	fi
 
+	# strip the v from the version number
+	actual_version=${actual_version#"v"}
+
 	# If the actual version doesn't match the expected version, throw an error
 	if [ "$actual_version" != "$current_version" ]; then
 		echo "buildrc version mismatch - wanted $current_version but got $actual_version"
