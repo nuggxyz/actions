@@ -1,75 +1,70 @@
 #!/usr/bin/env bash
 
-auto_version="$1"
-file_name_prefix="$2"
-INPUT_VERSION="$3"
-prerelease_id="$4"
+current_version="$1"
+filename_prefix="$2"
+input_version="$3"
 
-check_raw="0"
+is_raw="0"
 check_version="1"
-# Step 1: Check for buildrc-override
-if [ -n "$INPUT_VERSION" ]; then
-	auto_version="$INPUT_VERSION"
-	# if the version is not in the format v0.1.2, then we assume it is a raw version
-	if ! echo "$auto_version" | grep -qE "^v[0-9]+\.[0-9]+\.[0-9]+$"; then
-		check_raw="1"
+
+# If a version number is given, use it as current version
+if [ -n "$input_version" ]; then
+	current_version="$input_version"
+
+	# If the version number doesn't match the pattern vX.Y.Z, assume it's raw
+	if ! echo "$current_version" | grep -qE "^v[0-9]+\.[0-9]+\.[0-9]+$"; then
+		is_raw="1"
 	fi
 fi
-echo "Checking for buildrc-override... at $BUILDRC_EXEC_OVERRIDE"
-if [ -z "$INPUT_VERSION" ] && [ -f "$BUILDRC_EXEC_OVERRIDE" ]; then
-	echo "override artifact found - using in place of $auto_version 🔶"
+
+# If an input version isn't provided and a buildrc-override file exists, use it
+if [ -z "$input_version" ] && [ -f "$BUILDRC_EXEC_OVERRIDE" ]; then
+	echo "Override artifact found - using in place of $current_version 🔶"
 	mkdir -p temp
 	check_version="0"
 	cp "$BUILDRC_EXEC_OVERRIDE" "$BUILDRC_PATH_DIR/buildrc"
 else
-	case "$RUNNER_ARCH" in
-	X64) arch="amd64" ;;
-	arm) arch="armv7" ;;
-	arm64) arch="arm64" ;;
-	*) echo "Unsupported architecture" && exit 1 ;;
-	esac
-	case "$RUNNER_OS" in
-	Linux) os="linux" ;;
-	MacOS) os="darwin" ;;
-	Darwin) os="darwin" ;;
-	Windows) os="windows" ;;
-	*) echo "Unsupported is" && exit 1 ;;
-	esac
-	smp_os_arch="$os-$arch"
-	os_arch_pattern="$file_name_prefix$smp_os_arch.tar.gz"
-	echo "override artifact not found. downloading from GitHub releases... $os_arch_pattern $auto_version 🔷"
-	if [ -z "$prerelease_id" ]; then
-		echo "release[$auto_version] found - downloading release artifact $os_arch_pattern"
-		gh release download "$auto_version" -p "$os_arch_pattern" --repo nuggxyz/buildrc --dir "$wrk_dir" --clobber
-	else
-		echo "prerelease_id[$prerelease_id] found - downloading prerelease artifact $os_arch_pattern"
-		gh release download "$prerelease_id" -p "$os_arch_pattern" --repo nuggxyz/buildrc --dir "$wrk_dir" --clobber
-	fi
-	wrk_dir="$RUNNER_TEMP/setup-buildrc-wrk"
-	tar -xzf "$wrk_dir/$os_arch_pattern" -C "$wrk_dir"
-	cp "$wrk_dir/$file_name_prefix$smp_os_arch" "$BUILDRC_PATH_DIR/buildrc"
+	# Mapping environment variables to usable variables
+	arch_map=(["X64"]="amd64" ["arm"]="armv7" ["arm64"]="arm64")
+	os_map=(["Linux"]="linux" ["MacOS"]="darwin" ["Darwin"]="darwin" ["Windows"]="windows")
+
+	arch=${arch_map["$RUNNER_ARCH"]}
+	os=${os_map["$RUNNER_OS"]}
+
+	# Check if the architecture and OS are supported
+	[[ -z "$arch" ]] && echo "Unsupported architecture" && exit 1
+	[[ -z "$os" ]] && echo "Unsupported OS" && exit 1
+
+	# If an override artifact isn't found, download the necessary files
+	artifact_name="$filename_prefix$os-$arch.tar.gz"
+	echo "Override artifact not found. Downloading from GitHub releases... $artifact_name $current_version 🔷"
+	gh release download "$current_version" -p "$artifact_name" --repo nuggxyz/buildrc --dir "$RUNNER_TEMP" --clobber || exit 1
+	tar -xzf "$RUNNER_TEMP/$artifact_name" -C "$RUNNER_TEMP" || exit 1
+	cp "$RUNNER_TEMP/$filename_prefix$os-$arch" "$BUILDRC_PATH_DIR/buildrc"
 fi
 
-echo "running buildrc load ▶️"
+echo "Running buildrc load ▶️"
 chmod +x "$BUILDRC_PATH_DIR/buildrc"
-"$BUILDRC_PATH_DIR/buildrc" load
+"$BUILDRC_PATH_DIR/buildrc" load || exit 1
 echo "buildrc load successful ✅"
 
 if [ "$check_version" == "1" ]; then
-	echo "checking buildrc version 🔄"
-	if [ "$check_raw" == "1" ]; then
-		echo "checking raw version"
-		got=$("$wrk_dir/$file_name_prefix$smp_os_arch" version --raw --quiet)
-		want="$auto_version"
+	echo "Checking buildrc version 🔄"
+
+	if [ "$is_raw" == "1" ]; then
+		echo "Checking raw version"
+		actual_version=$("$BUILDRC_PATH_DIR/buildrc" version --raw --quiet)
 	else
-		echo "checking semver version"
-		got=$("$BUILDRC_PATH_DIR/buildrc" version --quiet)
-		want="$auto_version"
+		echo "Checking semver version"
+		actual_version=$("$BUILDRC_PATH_DIR/buildrc" version --quiet)
 	fi
-	if [ "$got" != "$want" ]; then
-		echo "buildrc version mismatch - wanted $want but got $got"
+
+	# If the actual version doesn't match the expected version, throw an error
+	if [ "$actual_version" != "$current_version" ]; then
+		echo "buildrc version mismatch - wanted $current_version but got $actual_version"
 		exit 1
 	fi
-	echo "buildrc version check successful ✅ - $got"
+
+	echo "buildrc version check successful ✅ - $actual_version"
 fi
-echo "checking buildrc version 🔄"
+echo "Checking buildrc version 🔄"
