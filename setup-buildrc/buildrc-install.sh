@@ -3,6 +3,7 @@
 current_version="$1"
 filename_prefix="$2"
 input_version="$3"
+draft_release_tag="$4"
 
 is_raw="0"
 check_version="1"
@@ -35,10 +36,18 @@ else
 	[[ -z "$arch" ]] && echo "Unsupported architecture" && exit 1
 	[[ -z "$os" ]] && echo "Unsupported OS" && exit 1
 
+	# If draft_release_tag is an empty string, use current_version
+	if [ -z "$draft_release_tag" ]; then
+		tag_to_check="$current_version"
+	else
+		# If draft_release_tag is not empty, use draft_release_tag
+		tag_to_check="$draft_release_tag"
+	fi
+
 	# If an override artifact isn't found, download the necessary files
 	artifact_name="$filename_prefix$os-$arch.tar.gz"
-	echo "Override artifact not found. Downloading from GitHub releases... $artifact_name $current_version 🔷"
-	gh release download "$current_version" -p "$artifact_name" --repo nuggxyz/buildrc --dir "$RUNNER_TEMP" --clobber || exit 1
+	echo "Override artifact not found. Downloading from GitHub release [tag:$tag_to_check] [artifact:$artifact_name] [version:$current_version] 🔷"
+	gh release download "$tag_to_check" -p "$artifact_name" --repo nuggxyz/buildrc --dir "$RUNNER_TEMP" --clobber || exit 1
 	tar -xzf "$RUNNER_TEMP/$artifact_name" -C "$RUNNER_TEMP" || exit 1
 	cp "$RUNNER_TEMP/$filename_prefix$os-$arch" "$BUILDRC_PATH_DIR/buildrc"
 fi
