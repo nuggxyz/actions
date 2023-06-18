@@ -1,5 +1,5 @@
 {
-    name: setup-action-bump,
+    name: bump,
     on:
         {
             schedule: [{ cron: "0 0 * * *" }],
@@ -22,19 +22,29 @@
                             },
                             {
                                 name: Update formula,
-                                id: script,
-
-                                run: "${{ github.workspace }}/scripts/action_bump.sh",
+                                id: ref-bump-script,
+                                run: "${{ github.workspace }}/scripts/ref_bump.sh",
+                            },
+                            {
+                                name: commit,
+                                id: ref-bump-commit,
+                                uses: stefanzweifel/git-auto-commit-action@v4,
+                                with:
+                                    {
+                                        file_pattern: "*/action.yml",
+                                        commit_message: "🤖 (ref-bump) ${{ steps.ref-bump-script.outputs.COMMIT_MESSAGE }}",
+                                        commit_author: "github-actions <41898282+github-actions[bot]@users.noreply.github.com>",
+                                    },
                             },
                             {
                                 name: Bump version and push tag,
-                                id: tag_version,
-                                if: "${{ steps.script.outputs.DID_UPDATE == '1' || github.event_name == 'push' }}",
+                                id: tag,
+                                if: "${{ steps.ref-bump-commit.outputs.changes_detected || github.event_name == 'push' }}",
                                 uses: anothrNick/github-tag-action@1,
                                 env:
                                     {
                                         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}",
-                                        WITH_V: false,
+                                        WITH_V: true,
                                         DEFAULT_BUMP: patch,
                                         DRY_RUN: true,
                                     },
@@ -42,43 +52,33 @@
                             {
                                 name: Update formula,
                                 id: self-bump-script,
-                                if: "${{ steps.tag_version.outputs.new_tag != '' }}",
-                                env:
-                                    {
-                                        TAG: "${{ steps.tag_version.outputs.new_tag }}",
-                                    },
-                                run: "${{ github.workspace }}/scripts/self_bump.sh v${{ env.TAG }}",
+                                if: "${{ steps.ref-bump-script.outputs.changes_detected || github.event_name == 'push' }}",
+                                run: "${{ github.workspace }}/scripts/self_bump.sh ${{ steps.tag.outputs.new_tag }}",
                             },
                             {
                                 name: commit,
-                                id: commit,
-                                if: "${{ steps.script.outputs.DID_UPDATE == '1' }}",
+                                id: self-bump-commit,
                                 uses: stefanzweifel/git-auto-commit-action@v4,
-                                env:
-                                    {
-                                        TAG: "${{ steps.tag_version.outputs.new_tag }}",
-                                    },
                                 with:
                                     {
                                         file_pattern: "*/action.yml",
-                                        commit_message: "(setup-action-bump) ${{ env.TAG }}",
+                                        commit_message: "🤖 (self-bump) internal refs to ${{ steps.tag.outputs.new_tag }}",
                                         commit_author: "github-actions <41898282+github-actions[bot]@users.noreply.github.com>",
                                     },
                             },
                             {
                                 name: Create GitHub Release,
                                 uses: ncipollo/release-action@v1,
-                                if: "${{ steps.script.outputs.DID_UPDATE == '1' || github.event_name == 'push' }}",
+                                if: "${{ steps.self-bump-commit.outputs.changes_detected }}",
                                 env:
                                     {
                                         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}",
-                                        TAG: "${{ steps.tag_version.outputs.new_tag }}",
                                     },
                                 with:
                                     {
-                                        tag: "v${{ env.TAG }}",
-                                        name: "${{ env.TAG }}",
-                                        body: "Auto-generated release for ${{ env.TAG }}\n\n${{ steps.script.outputs.SCRIPT_CHANGELOG }}",
+                                        tag: "${{ steps.tag.outputs.new_tag }}",
+                                        name: "${{ steps.tag.outputs.new_tag }}",
+                                        body: "🤖 auto-generated release for ${{ steps.tag.outputs.new_tag }}",
                                         draft: false,
                                         prerelease: false,
                                     },
