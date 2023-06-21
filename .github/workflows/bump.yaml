@@ -52,7 +52,7 @@
                             {
                                 name: Update formula,
                                 id: self-bump-script,
-                                if: "${{ steps.ref-bump-script.outputs.changes_detected || github.event_name == 'push' }}",
+                                if: "${{ steps.ref-bump-commit.outputs.changes_detected || github.event_name == 'push' }}",
                                 run: "${{ github.workspace }}/scripts/self_bump.sh ${{ steps.tag.outputs.new_tag }}",
                             },
                             {
