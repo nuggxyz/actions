@@ -2,14 +2,15 @@ name: buildrc-docker-helper
 description: "This action checks out the code, sets up Buildx and Qemu, generates Docker metadata, logs into Amazon ECR, ensures the ECR repository exists, and builds and pushes the Docker image."
 runs:
     using: "composite"
-    steps: [
+    steps:
+        [
             { uses: actions/checkout@v3 },
             {
                 id: verify-env,
                 shell: bash,
                 run:
                     'if [ -z "$GITHUB_TOKEN" ]; then echo "GITHUB_TOKEN is not set" && exit 1; fi;
-                    if [ -z "$BUILDRC_CONTAINER_PUSH" || "$BUILDRC_CONTAINER_PUSH" != "1" ]; then echo "BUILDRC_CONTAINER_PUSH is not set" && exit 1; fi;
+                    if [[ -z "$BUILDRC_CONTAINER_PUSH" || "$BUILDRC_CONTAINER_PUSH" != "1" ]]; then echo "BUILDRC_CONTAINER_PUSH is not set" && exit 1; fi;
                     if [ -z "$BUILDRC_CONTAINER_DOCKERFILE" ]; then echo "BUILDRC_CONTAINER_DOCKERFILE is not set" && exit 1; fi;
                     if [ -z "$BUILDRC_CONTAINER_BUILD_ARGS_JSON_STRING" ]; then echo "BUILDRC_CONTAINER_BUILD_ARGS_JSON_STRING is not set" && exit 1; fi;
                     if [ -z "$BUILDRC_CONTAINER_CONTEXT" ]; then echo "BUILDRC_CONTAINER_CONTEXT is not set" && exit 1; fi;
@@ -18,7 +19,7 @@ runs:
                     if [ -z "$BUILDRC_CONTAINER_TAGS_JSON_STRING" ]; then echo "BUILDRC_CONTAINER_TAGS_JSON_STRING is not set" && exit 1; fi;
                     if [ -z "$BUILDRC_CONTAINER_UPLOAD_TO_AWS" ]; then echo "BUILDRC_CONTAINER_UPLOAD_TO_AWS is not set" && exit 1; fi;
                     if [ -z "$BUILDRC_CONTAINER_IMAGES_JSON_STRING" ]; then echo "BUILDRC_CONTAINER_IMAGES_JSON_STRING is not set" && exit 1; fi;
-                    if [ -z "$BUILDRC_CONTAINER_BUILD_EXISTS"] ]; then echo "BUILDRC_CONTAINER_BUILD_EXISTS is not set" && exit 1; fi;
+                    if [ -z "$BUILDRC_CONTAINER_BUILD_EXISTS" ]; then echo "BUILDRC_CONTAINER_BUILD_EXISTS is not set" && exit 1; fi;
                     if [ "$BUILDRC_CONTAINER_UPLOAD_TO_AWS" == "1" ]; then
                     if [ -z "$BUILDRC_CONTAINER_UPLOAD_TO_AWS_IAM_ROLE" ]; then echo "BUILDRC_CONTAINER_UPLOAD_TO_AWS_IAM_ROLE is not set" && exit 1; fi;
                     if [ -z "$BUILDRC_CONTAINER_UPLOAD_TO_AWS_REGION" ]; then echo "BUILDRC_CONTAINER_UPLOAD_TO_AWS_REGION is not set" && exit 1; fi;
@@ -27,16 +28,6 @@ runs:
             },
             { name: qmeu, uses: "docker/setup-qemu-action@v2" },
             { id: "buildx", uses: docker/setup-buildx-action@v2 },
-            # {
-            #     name: Cache Docker layers,
-            #     uses: actions/cache@v3,
-            #     with:
-            #         {
-            #             path: "/tmp/.buildx-cache",
-            #             key: "${{ runner.os }}-buildx-${{ github.sha }}",
-            #             restore-keys: "${{ runner.os }}-buildx-",
-            #         },
-            # },
             {
                 name: Generate Docker metadata,
                 id: meta,
