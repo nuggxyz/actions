@@ -29,10 +29,7 @@
                                 uses: actions/checkout@v3,
                                 with: { fetch-depth: 0 },
                             },
-                            {
-                                id: setup-buildrc,
-                                uses: nuggxyz/actions/setup-buildrc,
-                            },
+                            { id: setup-buildrc, uses: setup-buildrc },
                             { id: setup-release, run: "buildrc release setup" },
                         ],
                 },
@@ -47,10 +44,7 @@
                                 uses: actions/checkout@v3,
                                 with: { fetch-depth: 0 },
                             },
-                            {
-                                id: setup-buildrc,
-                                uses: nuggxyz/actions/setup-buildrc,
-                            },
+                            { id: setup-buildrc, uses: setup-buildrc },
                             { id: build, run: "buildrc release build" },
                         ],
                 },
@@ -72,18 +66,12 @@
                                 uses: actions/checkout@v3,
                                 with: { fetch-depth: 0 },
                             },
-                            {
-                                id: setup-buildrc,
-                                uses: nuggxyz/actions/setup-buildrc,
-                            },
+                            { id: setup-buildrc, uses: setup-buildrc },
                             {
                                 id: container,
                                 run: "buildrc release container '${{ matrix.package }}'",
                             },
-                            {
-                                id: helper,
-                                uses: nuggxyz/actions/buildrc-docker-helper,
-                            },
+                            { id: helper, uses: buildrc-docker-helper },
                         ],
                 },
 
@@ -98,10 +86,7 @@
                                 uses: actions/checkout@v3,
                                 with: { fetch-depth: 0 },
                             },
-                            {
-                                id: setup-buildrc,
-                                uses: nuggxyz/actions/setup-buildrc,
-                            },
+                            { id: setup-buildrc, uses: setup-buildrc },
                             { id: finalize, run: "buildrc release finalize" },
                             { id: upload, run: "buildrc release upload" },
                         ],
