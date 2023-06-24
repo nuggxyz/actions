@@ -6,7 +6,7 @@
             workflow_dispatch: {},
             push: { branches: [main] },
         },
-    permissions: { contents: write, packages: write },
+    permissions: { contents: write, packages: write, workflows: write },
     env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}", BUILDRC: .buildrc },
     jobs:
         {
