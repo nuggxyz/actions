@@ -11,7 +11,7 @@ runs:
     using: "composite"
     steps:
         - name: mkdir
-          uses: nuggxyz/actions/run@v0.0.90
+          uses: nuggxyz/actions/run@v0.0.91
           with:
               before: |
                   mkdir -p "${{ inputs.path }}"
