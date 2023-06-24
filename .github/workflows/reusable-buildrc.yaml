@@ -31,7 +31,7 @@
                             },
                             {
                                 id: setup-buildrc,
-                                uses: nuggxyz/actions/setup-buildrc@0.0.0,
+                                uses: nuggxyz/actions/setup-buildrc@v0.0.0,
                             },
                             { id: setup-release, run: "buildrc release setup" },
                         ],
@@ -49,7 +49,7 @@
                             },
                             {
                                 id: setup-buildrc,
-                                uses: nuggxyz/actions/setup-buildrc@0.0.0,
+                                uses: nuggxyz/actions/setup-buildrc@v0.0.0,
                             },
                             { id: build, run: "buildrc release build" },
                         ],
@@ -74,7 +74,7 @@
                             },
                             {
                                 id: setup-buildrc,
-                                uses: nuggxyz/actions/setup-buildrc@0.0.0,
+                                uses: nuggxyz/actions/setup-buildrc@v0.0.0,
                             },
                             {
                                 id: container,
@@ -82,7 +82,7 @@
                             },
                             {
                                 id: helper,
-                                uses: nuggxyz/actions/buildrc-docker-helper@0.0.0,
+                                uses: nuggxyz/actions/buildrc-docker-helper@v0.0.0,
                             },
                         ],
                 },
@@ -100,7 +100,7 @@
                             },
                             {
                                 id: setup-buildrc,
-                                uses: nuggxyz/actions/setup-buildrc@0.0.0,
+                                uses: nuggxyz/actions/setup-buildrc@v0.0.0,
                             },
                             { id: finalize, run: "buildrc release finalize" },
                             { id: upload, run: "buildrc release upload" },
