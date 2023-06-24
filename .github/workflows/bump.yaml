@@ -31,7 +31,7 @@
                                 uses: stefanzweifel/git-auto-commit-action@v4,
                                 with:
                                     {
-                                        file_pattern: "*/action.yml",
+                                        file_pattern: "**/*.y*ml",
                                         commit_message: "🤖 (ref-bump) ${{ steps.ref-bump-script.outputs.COMMIT_MESSAGE }}",
                                         commit_author: "github-actions <41898282+github-actions[bot]@users.noreply.github.com>",
                                     },
