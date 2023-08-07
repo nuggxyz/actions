@@ -9,7 +9,7 @@ fi
 latest=$1
 
 # find any cases of "walteh/actions/*@v*" and replace with "walteh/actions/*@latest"
-formulas=$(find . \( -path "./*/action.yml" -o -path "./.github/workflows/*.yaml" \) -name "*.y*ml")
+formulas=$(find . \( -path "./**/action.yml" \) -name "*.y*ml")
 
 # Check if any action.yml files were found
 if [ -z "$formulas" ]; then
