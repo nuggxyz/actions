@@ -65,7 +65,7 @@
                 {
                     runs-on: "${{ needs.setup.outputs.BUILDRC_LOAD_BUILD_ON }}-latest",
                     env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" },
-                    needs: [setup],
+                    needs: [setup, build],
                     steps:
                         [
                             {
@@ -88,7 +88,7 @@
                 {
                     runs-on: ubuntu-latest,
                     env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" },
-                    needs: [setup, build],
+                    needs: [setup, build, test],
                     strategy:
                         {
                             matrix:
