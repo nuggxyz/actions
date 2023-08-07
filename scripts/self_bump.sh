@@ -21,17 +21,27 @@ echo "Found formulas: $formulas"
 
 for formula in $formulas; do
 
+	echo "Checking $formula"
+
 	found=$(grep -oE "walteh/actions/.*@v[0-9\.]+" "$formula")
 
+	echo "found= $found"
+
 	for f in $found; do
-		echo "Found $f"
 		action_name=$(echo "$f" | grep -oE "walteh/actions/[a-zA-Z_-]+")
+		echo "modifying $f to $action_name@$latest"
+
 		if [[ "$OSTYPE" == "linux"* ]]; then
+			echo "using linux sed to modify $formula"
 			# Linux
 			sed -i "s#${f}#${action_name}@${latest}#" "$formula"
 		elif [[ "$OSTYPE" == "darwin"* ]]; then
 			# Mac OSX
+			echo "using mac sed to modify $formula"
 			sed -i "" "s#${f}#${action_name}@${latest}#" "$formula"
+		else
+			echo "unknown OSTYPE='$OSTYPE'"
+			exit 1
 		fi
 	done
 done
