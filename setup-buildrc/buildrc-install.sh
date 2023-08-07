@@ -47,7 +47,7 @@ else
 	# If an override artifact isn't found, download the necessary files
 	artifact_name="$filename_prefix$os-$arch.tar.gz"
 	echo "Override artifact not found. Downloading from GitHub release [tag:$tag_to_check] [artifact:$artifact_name] [version:$current_version] 🔷"
-	gh release download "$tag_to_check" -p "$artifact_name" --repo nuggxyz/buildrc --dir "$RUNNER_TEMP" --clobber || exit 1
+	gh release download "$tag_to_check" -p "$artifact_name" --repo walteh/buildrc --dir "$RUNNER_TEMP" --clobber || exit 1
 	tar -xzf "$RUNNER_TEMP/$artifact_name" -C "$RUNNER_TEMP" || exit 1
 	cp "$RUNNER_TEMP/$filename_prefix$os-$arch" "$BUILDRC_PATH_DIR/buildrc"
 fi

@@ -8,7 +8,7 @@ fi
 
 latest=$1
 
-# find any cases of "nuggxyz/actions/*@v*" and replace with "nuggxyz/actions/*@latest"
+# find any cases of "walteh/actions/*@v*" and replace with "walteh/actions/*@latest"
 formulas=$(find . \( -path "./*/action.yml" -o -path "./.github/workflows/*.yaml" \) -name "*.y*ml")
 
 # Check if any action.yml files were found
@@ -21,11 +21,11 @@ echo "Found formulas: $formulas"
 
 for formula in $formulas; do
 
-	found=$(grep -oE "nuggxyz/actions/.*@v[0-9\.]+" "$formula")
+	found=$(grep -oE "walteh/actions/.*@v[0-9\.]+" "$formula")
 
 	for f in $found; do
 		echo "Found $f"
-		action_name=$(echo $f | grep -oE "nuggxyz/actions/[a-zA-Z_-]+")
+		action_name=$(echo $f | grep -oE "walteh/actions/[a-zA-Z_-]+")
 		if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 			# Linux
 			sed -i "s#${f}#${action_name}@${latest}#" "$formula"
