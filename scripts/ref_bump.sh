@@ -22,7 +22,7 @@ for setup in $setups; do
 	setup=$(dirname "$setup" | cut -d'-' -f2)
 
 	# Get the latest release from GitHub API for the tftab repo
-	LATEST_RELEASE=$(curl --silent "https://api.github.com/repos/nuggxyz/$setup/releases/latest" | jq -r '.tag_name')
+	LATEST_RELEASE=$(curl --silent "https://api.github.com/repos/walteh/$setup/releases/latest" | jq -r '.tag_name')
 
 	version=$(grep -oE "auto_version: .*" "$file" | cut -d' ' -f2)
 

@@ -34,7 +34,7 @@
                             },
                             {
                                 id: setup-buildrc,
-                                uses: nuggxyz/actions/setup-buildrc@main,
+                                uses: walteh/actions/setup-buildrc@main,
                             },
                             { id: setup-release, run: "buildrc release setup" },
                         ],
@@ -52,7 +52,7 @@
                             },
                             {
                                 id: setup-buildrc,
-                                uses: nuggxyz/actions/setup-buildrc@main,
+                                uses: walteh/actions/setup-buildrc@main,
                             },
                             {
                                 id: setup-go,
@@ -82,7 +82,7 @@
                             },
                             {
                                 id: setup-buildrc,
-                                uses: nuggxyz/actions/setup-buildrc@main,
+                                uses: walteh/actions/setup-buildrc@main,
                             },
                             {
                                 id: container,
@@ -90,7 +90,7 @@
                             },
                             {
                                 id: helper,
-                                uses: nuggxyz/actions/buildrc-docker-helper@main,
+                                uses: walteh/actions/buildrc-docker-helper@main,
                             },
                         ],
                 },
@@ -108,7 +108,7 @@
                             },
                             {
                                 id: setup-buildrc,
-                                uses: nuggxyz/actions/setup-buildrc@main,
+                                uses: walteh/actions/setup-buildrc@main,
                             },
                             { id: finalize, run: "buildrc release finalize" },
                             { id: upload, run: "buildrc release upload" },
