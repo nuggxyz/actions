@@ -25,8 +25,8 @@ for formula in $formulas; do
 
 	for f in $found; do
 		echo "Found $f"
-		action_name=$(echo $f | grep -oE "walteh/actions/[a-zA-Z_-]+")
-		if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+		action_name=$(echo "$f" | grep -oE "walteh/actions/[a-zA-Z_-]+")
+		if [[ "$OSTYPE" == "linux"* ]]; then
 			# Linux
 			sed -i "s#${f}#${action_name}@${latest}#" "$formula"
 		elif [[ "$OSTYPE" == "darwin"* ]]; then
