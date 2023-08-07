@@ -22,6 +22,9 @@
                     outputs:
                         {
                             BUILDRC_LOAD_PACKAGE_NAMES_ARRAY: "${{ env.BUILDRC_LOAD_PACKAGE_NAMES_ARRAY }}",
+                            BUILDRC_LOAD_USES_GO: "${{ env.BUILDRC_LOAD_USES_GO }}",
+                            BUILDRC_LOAD_USES_SWIFT: "${{ env.BUILDRC_LOAD_USES_SWIFT }}",
+                            BUILDRC_LOAD_BUILD_ON: "${{ env.BUILDRC_LOAD_BUILD_ON }}",
                         },
                     steps:
                         [
@@ -38,7 +41,7 @@
                 },
             build:
                 {
-                    runs-on: ubuntu-latest,
+                    runs-on: "${{ fromJson(needs.setup.outputs.BUILDRC_LOAD_BUILD_ON) }}-latest",
                     env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" },
                     needs: [setup],
                     steps:
@@ -50,6 +53,11 @@
                             {
                                 id: setup-buildrc,
                                 uses: nuggxyz/actions/setup-buildrc@main,
+                            },
+                            {
+                                id: setup-go,
+                                if: "${{ fromJson(needs.setup.outputs.BUILDRC_LOAD_USES_GO) }}",
+                                uses: actions/setup-go@v2,
                             },
                             { id: build, run: "buildrc release build" },
                         ],
