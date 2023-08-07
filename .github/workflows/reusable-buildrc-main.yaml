@@ -23,7 +23,6 @@
                         {
                             BUILDRC_LOAD_PACKAGE_NAMES_ARRAY: "${{ env.BUILDRC_LOAD_PACKAGE_NAMES_ARRAY }}",
                             BUILDRC_LOAD_USES_GO: "${{ env.BUILDRC_LOAD_USES_GO }}",
-                            BUILDRC_LOAD_USES_SWIFT: "${{ env.BUILDRC_LOAD_USES_SWIFT }}",
                             BUILDRC_LOAD_BUILD_ON: "${{ env.BUILDRC_LOAD_BUILD_ON }}",
                         },
                     steps:
