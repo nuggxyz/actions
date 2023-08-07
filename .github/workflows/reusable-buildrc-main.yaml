@@ -40,7 +40,7 @@
                 },
             build:
                 {
-                    runs-on: "${{ fromJson(needs.setup.outputs.BUILDRC_LOAD_BUILD_ON) }}-latest",
+                    runs-on: "${{ needs.setup.outputs.BUILDRC_LOAD_BUILD_ON }}-latest",
                     env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" },
                     needs: [setup],
                     steps:
