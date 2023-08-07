@@ -1,0 +1,37 @@
+{
+    name: bump,
+    on: { schedule: [{ cron: "0 0 * * *" }], workflow_dispatch: {} },
+    permissions: { contents: write, packages: write },
+    env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}", BUILDRC: .buildrc },
+    jobs:
+        {
+            main:
+                {
+                    runs-on: ubuntu-latest,
+                    steps:
+                        [
+                            {
+                                name: Check out code,
+                                uses: actions/checkout@v3,
+                                with: { clean: true, fetch-depth: 0 },
+                            },
+                            {
+                                name: Update formula,
+                                id: ref-bump-script,
+                                run: "${{ github.workspace }}/scripts/ref_bump.sh",
+                            },
+                            {
+                                name: commit,
+                                id: ref-bump-commit,
+                                uses: stefanzweifel/git-auto-commit-action@v4,
+                                with:
+                                    {
+                                        file_pattern: "**/*.y*ml",
+                                        commit_message: "🤖 (ref-bump) ${{ steps.ref-bump-script.outputs.COMMIT_MESSAGE }}",
+                                        commit_author: "github-actions <41898282+github-actions[bot]@users.noreply.github.com>",
+                                    },
+                            },
+                        ],
+                },
+        },
+}
