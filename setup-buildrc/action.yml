@@ -13,7 +13,7 @@ runs:
     using: "composite"
     steps:
         - name: workflow-cache
-          uses: walteh/actions/workflow-cache@v0.0.110
+          uses: walteh/actions/workflow-cache@v0.0.111
           with:
               path: "/home/runner/.buildrc-ghactions-cache"
               name: "setup-buildrc"
@@ -23,7 +23,7 @@ runs:
               path: "${{ github.workspace }}/.buildrc-ghactions-artifacts"
               if-no-files-found: "ignore"
         - name: buildrc-setup
-          uses: walteh/actions/run@v0.0.110
+          uses: walteh/actions/run@v0.0.111
           with:
               before: "${{ github.action_path }}/buildrc-init-env.sh"
               now: "${{ github.action_path }}/buildrc-install.sh ${{ env.auto_version }} ${{ env.file_name_prefix }} ${{ inputs.version }} ${{ inputs.draft }}"
