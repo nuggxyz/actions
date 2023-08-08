@@ -38,29 +38,6 @@
                             { id: setup-release, run: "buildrc release setup" },
                         ],
                 },
-            build:
-                {
-                    runs-on: "${{ needs.setup.outputs.BUILDRC_LOAD_BUILD_ON }}-latest",
-                    env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" },
-                    needs: [setup],
-                    steps:
-                        [
-                            {
-                                uses: actions/checkout@v3,
-                                with: { fetch-depth: 0 },
-                            },
-                            {
-                                id: setup-buildrc,
-                                uses: walteh/actions/setup-buildrc@main,
-                            },
-                            {
-                                id: setup-go,
-                                if: "${{ needs.setup.outputs.BUILDRC_LOAD_USES_GO == '1' }}",
-                                uses: actions/setup-go@v2,
-                            },
-                            { id: build, run: "buildrc release build" },
-                        ],
-                },
             test:
                 {
                     runs-on: "${{ needs.setup.outputs.BUILDRC_LOAD_BUILD_ON }}-latest",
@@ -82,6 +59,29 @@
                                 uses: actions/setup-go@v2,
                             },
                             { id: test, run: "buildrc release test" },
+                        ],
+                },
+            build:
+                {
+                    runs-on: "${{ needs.setup.outputs.BUILDRC_LOAD_BUILD_ON }}-latest",
+                    env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" },
+                    needs: [setup],
+                    steps:
+                        [
+                            {
+                                uses: actions/checkout@v3,
+                                with: { fetch-depth: 0 },
+                            },
+                            {
+                                id: setup-buildrc,
+                                uses: walteh/actions/setup-buildrc@main,
+                            },
+                            {
+                                id: setup-go,
+                                if: "${{ needs.setup.outputs.BUILDRC_LOAD_USES_GO == '1' }}",
+                                uses: actions/setup-go@v2,
+                            },
+                            { id: build, run: "buildrc release build" },
                         ],
                 },
             docker:
@@ -116,7 +116,29 @@
                             },
                         ],
                 },
-
+            verify:
+                {
+                    runs-on: "${{ needs.setup.outputs.BUILDRC_LOAD_BUILD_ON }}-latest",
+                    env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" },
+                    needs: [setup, build],
+                    steps:
+                        [
+                            {
+                                uses: actions/checkout@v3,
+                                with: { fetch-depth: 0 },
+                            },
+                            {
+                                id: setup-buildrc,
+                                uses: walteh/actions/setup-buildrc@main,
+                            },
+                            {
+                                id: setup-go,
+                                if: "${{ needs.setup.outputs.BUILDRC_LOAD_USES_GO == '1' }}",
+                                uses: actions/setup-go@v2,
+                            },
+                            { id: test, run: "buildrc release test" },
+                        ],
+                },
             finalize:
                 {
                     runs-on: ubuntu-latest,

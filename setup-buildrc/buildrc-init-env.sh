@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
 echo "setting up env 🔄"
+artifacts_dir="$HOME/.buildrc-ghactions-artifacts"
+echo "setting BUILDRC_ARTIFACTS_DIR env var to = $artifacts_dir"
+echo "BUILDRC_ARTIFACTS_DIR=$artifacts_dir" >>"$GITHUB_ENV"
 cache_dir="$HOME/.buildrc-ghactions-cache"
 echo "setting BUILDRC_CACHE_DIR env var to = $cache_dir"
 echo "BUILDRC_CACHE_DIR=$cache_dir" >>"$GITHUB_ENV"
@@ -18,4 +21,5 @@ echo "$path_dir" >>"$GITHUB_PATH"
 mkdir -p "$path_dir"
 mkdir -p "$temp_dir"
 mkdir -p "$cache_dir"
+mkdir -p "$artifacts_dir"
 echo "env set up ✅"
