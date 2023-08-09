@@ -1,0 +1,10 @@
+name: archive buildrc
+description: "archive buildrc in your github job"
+runs:
+    using: "composite"
+    steps:
+        - name: package-archive
+          uses: actions/upload-artifact@v3
+          with:
+              path: "${{ github.workspace }}/.buildrc-ghactions-artifacts"
+              if-no-files-found: "ignore"
