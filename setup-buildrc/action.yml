@@ -17,11 +17,6 @@ runs:
           with:
               path: "/home/runner/.buildrc-ghactions-cache"
               name: "setup-buildrc"
-        - name: package-archive
-          uses: actions/upload-artifact@v3
-          with:
-              path: "${{ github.workspace }}/.buildrc-ghactions-artifacts"
-              if-no-files-found: "ignore"
         - name: buildrc-setup
           uses: walteh/actions/run@v0.0.111
           with:
