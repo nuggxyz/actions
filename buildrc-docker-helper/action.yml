@@ -42,7 +42,7 @@ runs:
                         images: "${{ fromJson(env.BUILDRC_CONTAINER_IMAGES_JSON_STRING) }}",
                         github-token: "${{ env.GITHUB_TOKEN }}",
                         labels: "${{ fromJson(env.BUILDRC_CONTAINER_LABELS_JSON_STRING) }}",
-                        tags: "${{ fromJson(env.BUILDRC_CONTAINER_BUIULD_SPECIFIC_TAGS_JSON_STRING) }}",
+                        tags: "${{ fromJson(env.BUILDRC_CONTAINER_BUILD_SPECIFIC_TAGS_JSON_STRING) }}",
                     },
             },
             {
