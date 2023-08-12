@@ -10,6 +10,10 @@ runs:
                 shell: bash,
                 run:
                     'if [ -z "$GITHUB_TOKEN" ]; then echo "GITHUB_TOKEN is not set" && exit 1; fi;
+                    if [[ -z "$BUILDRC_SKIP_DOCKER" ]]; then echo "BUILDRC_SKIP_DOCKER is not set" && exit 1; fi;
+                    if [[ "$BUILDRC_SKIP_DOCKER" == "1" ]]; then echo "BUILDRC_SKIP_DOCKER is set to 1, skpping docker build." && exit 0; fi;
+                    if [[ -z "$BUILDRC_SKIP_DOCKER_BUILD" ]]; then echo "BUILDRC_SKIP_DOCKER_BUILD is not set" && exit 1; fi;
+                    if [[ -z "$BUILDRC_SKIP_DOCKER_TAG" ]]; then echo "BUILDRC_SKIP_DOCKER_TAG is not set" && exit 1; fi;
                     if [[ -z "$BUILDRC_CONTAINER_PUSH" ]]; then echo "BUILDRC_CONTAINER_PUSH is not set" && exit 1; fi;
                     if [[ "$BUILDRC_CONTAINER_PUSH" != "1" ]]; then echo "BUILDRC_CONTAINER_PUSH is not set to 1, skpping docker push." && exit 0; fi;
                     if [ -z "$BUILDRC_CONTAINER_DOCKERFILE" ]; then echo "BUILDRC_CONTAINER_DOCKERFILE is not set" && exit 1; fi;
@@ -18,6 +22,7 @@ runs:
                     if [ -z "$BUILDRC_CONTAINER_PLATFORMS_CSV" ]; then echo "BUILDRC_CONTAINER_PLATFORMS_CSV is not set" && exit 1; fi;
                     if [ -z "$BUILDRC_CONTAINER_LABELS_JSON_STRING" ]; then echo "BUILDRC_CONTAINER_LABELS_JSON_STRING is not set" && exit 1; fi;
                     if [ -z "$BUILDRC_CONTAINER_TAGS_JSON_STRING" ]; then echo "BUILDRC_CONTAINER_TAGS_JSON_STRING is not set" && exit 1; fi;
+                    if [ -z "$BUILDRC_CONTAINER_BUILD_SPECIFIC_TAGS_JSON_STRING" ]; then echo "BUILDRC_CONTAINER_TAGS_JSON_STRING is not set" && exit 1; fi;
                     if [ -z "$BUILDRC_CONTAINER_UPLOAD_TO_AWS" ]; then echo "BUILDRC_CONTAINER_UPLOAD_TO_AWS is not set" && exit 1; fi;
                     if [ -z "$BUILDRC_CONTAINER_IMAGES_JSON_STRING" ]; then echo "BUILDRC_CONTAINER_IMAGES_JSON_STRING is not set" && exit 1; fi;
                     if [ -z "$BUILDRC_CONTAINER_BUILD_EXISTS" ]; then echo "BUILDRC_CONTAINER_BUILD_EXISTS is not set" && exit 1; fi;
@@ -29,9 +34,22 @@ runs:
             },
             { name: qmeu, uses: "docker/setup-qemu-action@v2" },
             { id: "buildx", uses: docker/setup-buildx-action@v2 },
+
             {
-                name: Generate Docker metadata,
-                id: meta,
+                name: Generate Build Specific Docker metadata,
+                id: meta-build,
+                uses: docker/metadata-action@v4,
+                with:
+                    {
+                        images: "${{ fromJson(env.BUILDRC_CONTAINER_IMAGES_JSON_STRING) }}",
+                        github-token: "${{ env.GITHUB_TOKEN }}",
+                        labels: "${{ fromJson(env.BUILDRC_CONTAINER_LABELS_JSON_STRING) }}",
+                        tags: "${{ fromJson(env.BUILDRC_CONTAINER_BUIULD_SPECIFIC_TAGS_JSON_STRING) }}",
+                    },
+            },
+            {
+                name: Generate Full Docker metadata,
+                id: meta-full,
                 uses: docker/metadata-action@v4,
                 with:
                     {
@@ -79,15 +97,15 @@ runs:
                 name: "build image",
                 id: "build-and-push-image",
                 uses: "docker/build-push-action@v4",
-                if: "${{ env.BUILDRC_CONTAINER_BUILD_EXISTS == '0' }}",
+                if: "${{ env.BUILDRC_SKIP_DOCKER_BUILD == '0' }}",
                 with:
                     {
                         context: "${{ env.BUILDRC_CONTAINER_CONTEXT }}",
                         file: "${{ env.BUILDRC_CONTAINER_DOCKERFILE }}",
                         build-args: "${{ fromJson(env.BUILDRC_CONTAINER_BUILD_ARGS_JSON_STRING) }}",
                         push: true,
-                        tags: "${{ steps.meta.outputs.tags }}",
-                        labels: "${{ steps.meta.outputs.labels }}",
+                        tags: "${{ steps.meta-build.outputs.tags }}",
+                        labels: "${{ steps.meta-build.outputs.labels }}",
                         platforms: "${{ env.BUILDRC_CONTAINER_PLATFORMS_CSV }}",
                         github-token: "${{ env.GITHUB_TOKEN }}",
                     },
@@ -96,13 +114,13 @@ runs:
                 name: "build image",
                 id: "just-push-image",
                 uses: "docker/build-push-action@v4",
-                if: "${{ env.BUILDRC_CONTAINER_BUILD_EXISTS == '1' }}",
+                if: "${{ env.BUILDRC_SKIP_DOCKER_TAG == '0' }}",
                 with:
                     {
                         push: true,
                         pull: true,
-                        tags: "${{ steps.meta.outputs.tags }}",
-                        labels: "${{ steps.meta.outputs.labels }}",
+                        tags: "${{ steps.meta-full.outputs.tags }}",
+                        labels: "${{ steps.meta-full.outputs.labels }}",
                         github-token: "${{ env.GITHUB_TOKEN }}",
                     },
             },
