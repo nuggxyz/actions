@@ -14,8 +14,6 @@ runs:
                     if [[ "$BUILDRC_SKIP_DOCKER" == "1" ]]; then echo "BUILDRC_SKIP_DOCKER is set to 1, skpping docker build." && exit 0; fi;
                     if [[ -z "$BUILDRC_SKIP_DOCKER_BUILD" ]]; then echo "BUILDRC_SKIP_DOCKER_BUILD is not set" && exit 1; fi;
                     if [[ -z "$BUILDRC_SKIP_DOCKER_TAG" ]]; then echo "BUILDRC_SKIP_DOCKER_TAG is not set" && exit 1; fi;
-                    if [[ -z "$BUILDRC_CONTAINER_PUSH" ]]; then echo "BUILDRC_CONTAINER_PUSH is not set" && exit 1; fi;
-                    if [[ "$BUILDRC_CONTAINER_PUSH" != "1" ]]; then echo "BUILDRC_CONTAINER_PUSH is not set to 1, skpping docker push." && exit 0; fi;
                     if [ -z "$BUILDRC_CONTAINER_DOCKERFILE" ]; then echo "BUILDRC_CONTAINER_DOCKERFILE is not set" && exit 1; fi;
                     if [ -z "$BUILDRC_CONTAINER_BUILD_ARGS_JSON_STRING" ]; then echo "BUILDRC_CONTAINER_BUILD_ARGS_JSON_STRING is not set" && exit 1; fi;
                     if [ -z "$BUILDRC_CONTAINER_CONTEXT" ]; then echo "BUILDRC_CONTAINER_CONTEXT is not set" && exit 1; fi;
