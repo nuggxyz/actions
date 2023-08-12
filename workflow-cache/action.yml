@@ -11,7 +11,7 @@ runs:
     using: "composite"
     steps:
         - name: mkdir
-          uses: walteh/actions/run@v0.0.117
+          uses: walteh/actions/run@v0.0.118
           with:
               before: |
                   mkdir -p "${{ inputs.path }}"
