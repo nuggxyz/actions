@@ -7,6 +7,14 @@ inputs:
     path:
         description: "the path to use"
         required: false
+    save:
+        description: "whether to save the cache"
+        required: false
+        default: "true"
+    load:
+        description: "whether to load the cache"
+        required: false
+        default: "true"
 runs:
     using: "composite"
     steps:
@@ -18,11 +26,13 @@ runs:
         - name: restore-previous
           uses: actions/cache/restore@v3
           id: restore
+          if: "${{ inputs.load == 'true' }}"
           with:
               path: "${{ inputs.path }}"
               key: "${{ runner.os }}-${{ github.workflow }}-${{ inputs.name }}-${{ github.run_id }}-${{ github.run_number }}-"
         - name: override-previous
           uses: actions/cache@v3
+          if: "${{ inputs.save == 'true' }}"
           with:
               path: "${{ inputs.path }}"
               key: "${{ runner.os }}-${{ github.workflow }}-${{ inputs.name }}-${{ github.run_id }}-${{ github.run_number }}-${{ github.job }}"

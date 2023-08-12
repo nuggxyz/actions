@@ -9,6 +9,10 @@ inputs:
         description: "whether to use the draft version of buildrc"
         required: false
         default: ""
+    save_cache:
+        description: "whether to save the cache"
+        required: false
+        default: "true"
 runs:
     using: "composite"
     steps:
@@ -17,6 +21,7 @@ runs:
           with:
               path: "/home/runner/.buildrc-ghactions-cache"
               name: "setup-buildrc"
+              save: "${{ inputs.save_cache }}"
         - name: buildrc-setup
           uses: walteh/actions/run@v0.0.118
           with:
