@@ -104,27 +104,13 @@ runs:
                         file: "${{ env.BUILDRC_CONTAINER_DOCKERFILE }}",
                         build-args: "${{ fromJson(env.BUILDRC_CONTAINER_BUILD_ARGS_JSON_STRING) }} --progress=plain",
                         push: true,
-                        tags: "${{ steps.meta-build.outputs.tags }}",
-                        labels: "${{ steps.meta-build.outputs.labels }}",
+                        tags: "${{ steps.meta-full.outputs.tags }}",
+                        labels: "${{ steps.meta-full.outputs.labels }}",
                         platforms: "${{ env.BUILDRC_CONTAINER_PLATFORMS_CSV }}",
                         github-token: "${{ env.GITHUB_TOKEN }}",
                         provenance: true,
                         sbom: true,
                         load: false, # set to true if you want to load the image into the runner
-                    },
-            },
-            {
-                name: "build image",
-                id: "just-push-image",
-                uses: "docker/build-push-action@v4",
-                if: "${{ env.BUILDRC_SKIP_DOCKER_TAG == '0' }}",
-                with:
-                    {
-                        push: true,
-                        pull: true,
-                        tags: "${{ steps.meta-full.outputs.tags }}",
-                        labels: "${{ steps.meta-full.outputs.labels }}",
-                        github-token: "${{ env.GITHUB_TOKEN }}",
                     },
             },
         ]
