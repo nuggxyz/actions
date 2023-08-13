@@ -108,8 +108,6 @@ runs:
                         labels: "${{ steps.meta-build.outputs.labels }}",
                         platforms: "${{ env.BUILDRC_CONTAINER_PLATFORMS_CSV }}",
                         github-token: "${{ env.GITHUB_TOKEN }}",
-                        cache-from: "type=local,src=/tmp/.buildx-cache",
-                        cache-to: "type=local,dest=/tmp/.buildx-cache",
                         provenance: true,
                         sbom: true,
                         load: false, # set to true if you want to load the image into the runner
