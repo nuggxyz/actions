@@ -28,5 +28,5 @@ runs:
               before: "${{ github.action_path }}/buildrc-init-env.sh"
               now: "${{ github.action_path }}/buildrc-install.sh ${{ env.auto_version }} ${{ env.file_name_prefix }} ${{ inputs.version }} ${{ inputs.draft }}"
           env:
-              auto_version: v0.5.0
+              auto_version: v0.6.0
               file_name_prefix: buildrc-
