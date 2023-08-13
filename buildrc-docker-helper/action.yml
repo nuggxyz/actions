@@ -4,7 +4,6 @@ runs:
     using: "composite"
     steps:
         [
-            { uses: actions/checkout@v3 },
             {
                 id: verify-env,
                 shell: bash,
@@ -101,7 +100,7 @@ runs:
                 uses: "docker/build-push-action@v4",
                 if: "${{ env.BUILDRC_SKIP_DOCKER_BUILD == '0' }}",
                 with: {
-                        context: "${{ github.workspace }}",
+                        context: "${{ env.BUILDRC_CONTAINER_CONTEXT }}",
                         file: "${{ env.BUILDRC_CONTAINER_DOCKERFILE }}",
                         build-args: "${{ fromJson(env.BUILDRC_CONTAINER_BUILD_ARGS_JSON_STRING) }} --progress=plain",
                         push: true,
