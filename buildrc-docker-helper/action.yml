@@ -101,7 +101,7 @@ runs:
                 uses: "docker/build-push-action@v4",
                 if: "${{ env.BUILDRC_SKIP_DOCKER_BUILD == '0' }}",
                 with: {
-                        context: "${{ env.BUILDRC_CONTAINER_CONTEXT }}",
+                        context: "${{ github.workspace }}",
                         file: "${{ env.BUILDRC_CONTAINER_DOCKERFILE }}",
                         build-args: "${{ fromJson(env.BUILDRC_CONTAINER_BUILD_ARGS_JSON_STRING) }} --progress=plain",
                         push: true,
