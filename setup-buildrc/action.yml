@@ -13,6 +13,10 @@ inputs:
         description: "whether to save the cache"
         required: false
         default: "true"
+outputs:
+    next_tag:
+        value: ${{ env.BUILDRC_TAG }}
+        description: "the version of buildrc used"
 runs:
     using: "composite"
     steps:
