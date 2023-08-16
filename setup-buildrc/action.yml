@@ -15,8 +15,8 @@ inputs:
         default: "true"
 outputs:
     next_tag:
-        value: ${{ env.BUILDRC_TAG }}
-        description: "the version of buildrc used"
+        value: ${{ steps.buildrc-setup.outputs.BUILDRC_TAG }}
+        description: "the version of the build to use"
 runs:
     using: "composite"
     steps:
